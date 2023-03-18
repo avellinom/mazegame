@@ -1,2 +1,3 @@
-(test
- (name maze_generator))
+(executable
+ (name main)
+ (libraries ounit2))
