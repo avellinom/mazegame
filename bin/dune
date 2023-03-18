@@ -1,0 +1,4 @@
+(executable
+ (public_name maze_generator)
+ (name main)
+ (libraries maze_generator))
