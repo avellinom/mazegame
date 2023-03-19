@@ -1,9 +1,14 @@
 open OUnit2
+(* open Board *)
+open Maze_generator
 
 let default_test (name : string) (input : string) : test =
   name >:: fun _ ->
-  assert_equal "hi" input
+  let _ = print_string "\n>>> THE TESTS ARE RUNNING WELL <<<" in 
 
+  let _ = Maze_generator.Board in 
+
+  assert_equal "hi" input
 
 let default_tests = [ 
   default_test "default_test" "hi";
