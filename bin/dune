@@ -1,4 +1,4 @@
 (executable
- (public_name maze_generator)
+ (public_name Maze_generator)
  (name main)
  (libraries maze_generator))

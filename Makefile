@@ -9,7 +9,7 @@ code:
 	! dune build --watch
 
 utop:
-	OCAMLRUNPARAM=b dune utop src
+	OCAMLRUNPARAM=b dune utop lib
 
 test:
 	OCAMLRUNPARAM=b dune exec test/main.exe
@@ -24,12 +24,12 @@ finalcheck:
 	@bash check.sh final
 
 zip:
-	rm -f adventure.zip
-	zip -r adventure.zip . -x@exclude.lst
+	rm -f maze_generator.zip
+	zip -r maze_generator.zip . -x@exclude.lst
 
 clean:
 	dune clean
-	rm -f adventure.zip
+	rm -f maze_generator.zip
 
 doc:
 	dune build @doc
