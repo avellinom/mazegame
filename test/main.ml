@@ -1,7 +1,7 @@
 open OUnit2
 open Maze_generator
 
-let default_test (name : string) (input : string list list) : test =
+let default_test (name : string) (input : string array array) : test =
   name >:: fun _ ->
   let _ = Board.set_matrix input in 
   let _ = Board.print () in 
@@ -10,7 +10,7 @@ let default_test (name : string) (input : string list list) : test =
 
 
 let default_tests = [ 
-  default_test "Printing default board" ([ [ "a"; "b"; "c" ]; [ "d"; "e"; "f" ]; [ "g"; "h"; "i" ] ])
+  default_test "Printing default board" ([| [| "a"; "b"; "c" |]; [| "d"; "e"; "f" |]; [| "g"; "h"; "i" |] |])
 ]
 let tests = "test suite for MS2" >::: List.flatten [ default_tests ]
 let _ = run_test_tt_main tests

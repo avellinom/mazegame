@@ -3,7 +3,7 @@
 module type BOARD = sig
 
   (* The matrix representing the Board *)
-  val matrix : string list list ref
+  val matrix : string array array ref
 
   (* Prints the matrix to the console *)
   val print : unit -> unit
@@ -12,34 +12,30 @@ module type BOARD = sig
   val matrix_to_string : unit -> string 
 
   (* Sets the matrix to the matrix given in the argument *)
-  val set_matrix : string list list -> unit
+  val set_matrix : string array array -> unit
 end
 
 
 
 module Board : BOARD = struct
-  let matrix = ref [[">>> EMPTY MATRIX <<<"]]
-
+  let matrix = ref [|[|">>> EMPTY MATRIX <<<"|]|]
   
-  let set_matrix (mtx : string list list) =
-    matrix := mtx (* TODO: FIGURE OUT WHY THIS DOESN'T WORK! *)
+  let set_matrix (mtx : string array array) =
+    matrix := mtx 
 
-  let rec line_to_string lst =
-    match lst with
-    | [] -> ""
-    | h :: t ->
-        h ^ " " ^ (line_to_string t)
+  let line_to_string arr =
+    Array.fold_left (fun x y -> x ^ y ^ " ") "" arr 
     
-  let rec printAll mtx = 
-    match mtx with 
-    | [] -> ""
-    | h :: t ->
-      ("\n  ") ^ (line_to_string h) ^ (printAll t)
+  let printAll (mtx : string array array) = 
+    Array.fold_left (fun x y -> x ^ (line_to_string y) ^ "\n  ") "" mtx 
 
   let matrix_to_string () =
-    ("\n" ^ (printAll !matrix) ^ "\n")
+    ("\n\n  " ^ (printAll !matrix) ^ "\n")
 
   let print () = 
     print_string (matrix_to_string ())
+
+  (* let generate () = *)
+
 
 end
