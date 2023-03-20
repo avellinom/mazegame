@@ -6,10 +6,10 @@ module type BOARD = sig
   val matrix : string list list ref
 
   (* Prints the matrix to the console *)
-  val print : unit 
+  val print : unit -> unit
 
   (* Returns a string representation of the matrix *)
-  val matrix_to_string : string 
+  val matrix_to_string : unit -> string 
 
   (* Sets the matrix to the matrix given in the argument *)
   val set_matrix : string list list -> unit
@@ -36,10 +36,10 @@ module Board : BOARD = struct
     | h :: t ->
       ("\n  ") ^ (line_to_string h) ^ (printAll t)
 
-  let matrix_to_string =
+  let matrix_to_string () =
     ("\n" ^ (printAll !matrix) ^ "\n")
 
-  let print = 
-    print_string matrix_to_string
+  let print () = 
+    print_string (matrix_to_string ())
 
 end

@@ -4,7 +4,7 @@ open Maze_generator
 let default_test (name : string) (input : string list list) : test =
   name >:: fun _ ->
   let _ = Board.set_matrix input in 
-  let _ = Board.print in 
+  let _ = Board.print () in 
   (* assert_equal !Board.matrix input *)
   assert_equal input input
 
