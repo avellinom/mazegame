@@ -13,6 +13,13 @@ module type BOARD = sig
 
   (* Sets the matrix to the matrix given in the argument *)
   val set_matrix : string array array -> unit
+
+  (* Generates a valid, solvable maze 
+     "#" represent Walls
+     "." represent Paths
+     "S" represents the Start
+     "E" represents the End *)
+  val generate : unit -> unit
 end
 
 
@@ -35,7 +42,15 @@ module Board : BOARD = struct
   let print () = 
     print_string (matrix_to_string ())
 
-  (* let generate () = *)
+  let generate () =
+    matrix := Array.make_matrix 10 10 "X" (* Placeholder method that fills Array*)
+    (**
+      TODO: Implement function that generates a solvable maze.
+            "#" represent Walls
+            "." represent Paths
+            "S" represents the Start
+            "E" represents the End 
+    *)
 
 
 end
