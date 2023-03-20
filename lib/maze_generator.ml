@@ -5,9 +5,17 @@ module Board = struct
     match lst with
     | [] -> ()
     | h :: t ->
-        print_string h;
-        print_string " ";
+        print_string (h ^ " ");
         print_line t
+    
+  let rec printAll mtx = 
+    match mtx with 
+    | [] -> ()
+    | h :: t ->
+      print_string "\n  ";
+      print_line h;
+      printAll t
 
-  let print_first_line = print_line (List.hd matrix)
+  let print = 
+    printAll matrix
 end
