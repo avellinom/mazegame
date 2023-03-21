@@ -1,0 +1,7 @@
+(lang dune 3.7)
+(name maze_generator)
+(sections (lib .) (bin ../../bin) (doc ../../doc/maze_generator))
+(files
+ (lib (META dune-package opam))
+ (bin (Maze_generator))
+ (doc (README.md)))
