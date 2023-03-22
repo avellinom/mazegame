@@ -1,0 +1,19 @@
+---
+group:
+  - name: Jun Jang
+    netid: jj578
+  - name: Michael Avellino
+    netid: mca63
+  - name: Alexey Elkin
+    netid: ae339
+pm:
+  name: Sydney Tran
+  netid: sdt35
+publish: true
+title: "Collect Art in the Maze!"
+git-repo: "https://github.coecis.cornell.edu/jj578/maze_generator"
+demo-video-url: ""
+desc: >
+  Our project generates a maze in which you can move around and collect art pieces. 
+  We have different levels of maze provided for you to solve, and each one of
+  them will have randomly generated art piecs waiting for you!
