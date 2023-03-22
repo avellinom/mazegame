@@ -14,6 +14,8 @@ module type BOARD = sig
   (* Generates a valid, solvable maze "#" represent Walls "." represent Paths
      "S" represents the Start "E" represents the End *)
   val generate : unit -> unit
+
+  val get_letter : char -> string array
 end
 
 module Board : BOARD = struct
@@ -32,4 +34,168 @@ module Board : BOARD = struct
   let generate () =
     matrix :=
       Array.make_matrix 10 10 "X" (* Placeholder method that fills Array*)
+
+  
+  (* let generate_ascii_text (text : string) =
+    ... *)
+
+    (*font: sub-zero, ANSI Shadow, bloody, Roman*)
+    (* alphabet string line with boundaries? Alphabet string array? 2D
+    https://capitalizemytitle.com/copy-paste-alphabets/
+       https://textkool.com/en/test-ascii-art-generator?text=Your%20text%20here%20
+       *)
+
+    (* let char_to_ascii (c : char) = *)
+
+    (*
+    ░█▀█░█▀▄░█▀▀░█▀▄░█▀▀░█▀▀░█▀▀░█░█░▀█▀░▀▀█░█░█░█░░░█▄█░█▀█░█▀█░█▀█░▄▀▄░█▀▄░█▀▀░▀█▀░█░█░█░█░█░█░█░█░█░█░▀▀█
+    ░█▀█░█▀▄░█░░░█░█░█▀▀░█▀▀░█░█░█▀█░░█░░░░█░█▀▄░█░░░█░█░█░█░█░█░█▀▀░█\█░█▀▄░▀▀█░░█░░█░█░▀▄▀░█▄█░▄▀▄░░█░░▄▀░
+    ░▀░▀░▀▀░░▀▀▀░▀▀░░▀▀▀░▀░░░▀▀▀░▀░▀░▀▀▀░▀▀░░▀░▀░▀▀▀░▀░▀░▀░▀░▀▀▀░▀░░░░▀\░▀░▀░▀▀▀░░▀░░▀▀▀░░▀░░▀░▀░▀░▀░░▀░░▀▀▀   
+
+    *)
+    
+  let alphabet = [|
+    [|
+      "░█▀█";
+      "░█▀█";
+      "░▀░▀░"
+    |];
+    [|
+      "░█▀▄";
+      "░█▀▄";
+      "░▀▀░"
+    |];
+    [|
+      "░█▀▀";
+      "░█░░";
+      "░▀▀▀"
+    |];
+    [|
+      "░█▀▄";
+      "░█░█";
+      "░▀▀░"
+    |];
+    [|
+      "░█▀▀";
+      "░█▀▀";
+      "░▀▀▀"
+    |];
+    [|
+      "░█▀▀";
+      "░█▀▀";
+      "░▀░░"
+    |];
+    [|
+      "░█▀▀";
+      "░█░█";
+      "░▀▀▀"
+    |];
+    [|
+      "░█░█";
+      "░█▀█";
+      "░▀░▀"
+    |];
+    [|
+      "░▀█▀";
+      "░░█░";
+      "░▀▀▀"
+    |];
+    [|
+      "░▀▀█";
+      "░░░█";
+      "░▀▀░"
+    |];
+    [|
+      "░█░█";
+      "░█▀▄";
+      "░▀░▀"
+    |];
+    [|
+      "░█░░";
+      "░█░░";
+      "░▀▀▀"
+    |];
+    [|
+      "░█▄█";
+      "░█░█";
+      "░▀░▀"
+    |];
+    [|
+      "░█▀█";
+      "░█░█";
+      "░▀░▀"
+    |];
+    [|
+      "░█▀█";
+      "░█░█";
+      "░▀▀▀"
+    |];
+    [|
+      "░█▀█";
+      "░█▀▀";
+      "░▀░░"
+    |];
+    [|
+      "░█░█";
+      "░█▄█";
+      "░▀░▀"
+    |];
+    [|
+      "░█▀▄";
+      "░█▀▄";
+      "░▀░▀"
+    |];
+    [|
+      "░█▀▀";
+      "░▀▀█";
+      "░▀▀▀"
+    |];
+    [|
+      "░▀█▀";
+      "░░█░";
+      "░░▀░"
+    |];
+    [|
+      "░█░█";
+      "░█░█";
+      "░▀▀▀"
+    |];
+    [|
+      "░█░█";
+      "░▀▄▀";
+      "░░▀░"
+    |];
+    [|
+      "░█░█";
+      "░█▄█";
+      "░▀░▀"
+    |];
+    [|
+      "░█░█";
+      "░▄▀▄";
+      "░▀░▀"
+    |];
+    [|
+      "░█░█";
+      "░░█░";
+      "░░▀░"
+    |];
+    [|
+      "░▀▀█";
+      "░▄▀░";
+      "░▀▀▀"
+    |];
+  |]
+
+  let get_letter (c : char) =
+    let index = (int_of_char c) - (int_of_char 'a') in 
+    alphabet.(index)
+      
+  let explode s = List.init (String.length s) (String.get s)
+
+  let get_string (s : string) = 
+    let rec create_array (s : string) =
+      match explode s with
+      | [] -> []
+      | h :: t -> 
 end
