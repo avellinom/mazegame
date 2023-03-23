@@ -1,4 +1,0 @@
-Pitch 2:
-A relational database system--similar to SQL, with capabilities for building, dropping, and querying tables. There would be a GUI for the user to interface with the database. This would be an idea of moderate difficulty
-
-TODO: finish

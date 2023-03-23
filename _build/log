@@ -1,9 +1,10 @@
-# dune build
+# dune exec bin/main.exe
 # OCAMLPARAM: unset
 # Shared cache: disabled
-# Workspace root: /Users/junjang/Documents/CS3110/maze_generator
+# Workspace root:
+# /Users/michaelavellino/Desktop/Cornell/SS23/CS3110/final-project/maze_generator
 # Auto-detected concurrency: 8
-$ /Users/junjang/.opam/cs3110-2022fa/bin/ocamlc.opt -config > /var/folders/bl/xjkb8jzj7kz3903r1qxm8nb40000gn/T/dune_fd8985_output
+$ /Users/michaelavellino/.opam/cs3110-2023sp/bin/ocamlc.opt -config > /var/folders/y8/_4m1tfr92hgcgfd3bz11v25m0000gn/T/dune_c04eb9_output
 # Dune context:
 #  { name = "default"
 #  ; kind = "default"
@@ -13,41 +14,53 @@ $ /Users/junjang/.opam/cs3110-2022fa/bin/ocamlc.opt -config > /var/folders/bl/xj
 #  ; fdo_target_exe = None
 #  ; build_dir = In_build_dir "default"
 #  ; toplevel_path =
-#      Some External "/Users/junjang/.opam/cs3110-2022fa/lib/toplevel"
-#  ; ocaml_bin = External "/Users/junjang/.opam/cs3110-2022fa/bin"
-#  ; ocaml = Ok External "/Users/junjang/.opam/cs3110-2022fa/bin/ocaml"
-#  ; ocamlc = External "/Users/junjang/.opam/cs3110-2022fa/bin/ocamlc.opt"
+#      Some External "/Users/michaelavellino/.opam/cs3110-2023sp/lib/toplevel"
+#  ; ocaml_bin = External "/Users/michaelavellino/.opam/cs3110-2023sp/bin"
+#  ; ocaml = Ok External "/Users/michaelavellino/.opam/cs3110-2023sp/bin/ocaml"
+#  ; ocamlc =
+#      External "/Users/michaelavellino/.opam/cs3110-2023sp/bin/ocamlc.opt"
 #  ; ocamlopt =
-#      Ok External "/Users/junjang/.opam/cs3110-2022fa/bin/ocamlopt.opt"
+#      Ok
+#        External "/Users/michaelavellino/.opam/cs3110-2023sp/bin/ocamlopt.opt"
 #  ; ocamldep =
-#      Ok External "/Users/junjang/.opam/cs3110-2022fa/bin/ocamldep.opt"
+#      Ok
+#        External "/Users/michaelavellino/.opam/cs3110-2023sp/bin/ocamldep.opt"
 #  ; ocamlmklib =
-#      Ok External "/Users/junjang/.opam/cs3110-2022fa/bin/ocamlmklib.opt"
+#      Ok
+#        External
+#          "/Users/michaelavellino/.opam/cs3110-2023sp/bin/ocamlmklib.opt"
 #  ; env =
 #      map
-#        { "DUNE_OCAML_HARDCODED" : "/Users/junjang/.opam/cs3110-2022fa/lib"
-#        ; "DUNE_OCAML_STDLIB" : "/Users/junjang/.opam/cs3110-2022fa/lib/ocaml"
-#        ; "DUNE_SOURCEROOT" : "/Users/junjang/Documents/CS3110/maze_generator"
+#        { "DUNE_OCAML_HARDCODED" :
+#            "/Users/michaelavellino/.opam/cs3110-2023sp/lib"
+#        ; "DUNE_OCAML_STDLIB" :
+#            "/Users/michaelavellino/.opam/cs3110-2023sp/lib/ocaml"
+#        ; "DUNE_SOURCEROOT" :
+#            "/Users/michaelavellino/Desktop/Cornell/SS23/CS3110/final-project/maze_generator"
 #        ; "INSIDE_DUNE" :
-#            "/Users/junjang/Documents/CS3110/maze_generator/_build/default"
+#            "/Users/michaelavellino/Desktop/Cornell/SS23/CS3110/final-project/maze_generator/_build/default"
+#        ; "MANPATH" :
+#            "/Users/michaelavellino/Desktop/Cornell/SS23/CS3110/final-project/maze_generator/_build/install/default/bin"
 #        ; "OCAMLFIND_IGNORE_DUPS_IN" :
-#            "/Users/junjang/Documents/CS3110/maze_generator/_build/install/default/lib"
+#            "/Users/michaelavellino/Desktop/Cornell/SS23/CS3110/final-project/maze_generator/_build/install/default/lib"
 #        ; "OCAMLPATH" :
-#            "/Users/junjang/Documents/CS3110/maze_generator/_build/install/default/lib"
+#            "/Users/michaelavellino/Desktop/Cornell/SS23/CS3110/final-project/maze_generator/_build/install/default/lib"
 #        ; "OCAMLTOP_INCLUDE_PATH" :
-#            "/Users/junjang/Documents/CS3110/maze_generator/_build/install/default/lib/toplevel"
+#            "/Users/michaelavellino/Desktop/Cornell/SS23/CS3110/final-project/maze_generator/_build/install/default/lib/toplevel"
 #        ; "OCAML_COLOR" : "always"
 #        ; "OPAMCOLOR" : "always"
 #        }
-#  ; findlib_paths = [ External "/Users/junjang/.opam/cs3110-2022fa/lib" ]
+#  ; findlib_paths =
+#      [ External "/Users/michaelavellino/.opam/cs3110-2023sp/lib" ]
 #  ; arch_sixtyfour = true
 #  ; natdynlink_supported = true
 #  ; supports_shared_libraries = true
 #  ; ocaml_config =
 #      { version = "4.14.0"
 #      ; standard_library_default =
-#          "/Users/junjang/.opam/cs3110-2022fa/lib/ocaml"
-#      ; standard_library = "/Users/junjang/.opam/cs3110-2022fa/lib/ocaml"
+#          "/Users/michaelavellino/.opam/cs3110-2023sp/lib/ocaml"
+#      ; standard_library =
+#          "/Users/michaelavellino/.opam/cs3110-2023sp/lib/ocaml"
 #      ; standard_runtime = "the_standard_runtime_variable_was_deleted"
 #      ; ccomp_type = "cc"
 #      ; c_compiler = "cc"
@@ -77,7 +90,7 @@ $ /Users/junjang/.opam/cs3110-2022fa/bin/ocamlc.opt -config > /var/folders/bl/xj
 #      ; native_c_libraries = [ "-lm" ]
 #      ; native_pack_linker = [ "ld"; "-r"; "-o" ]
 #      ; cc_profile = []
-#      ; architecture = "arm64"
+#      ; architecture = "amd64"
 #      ; model = "default"
 #      ; int_size = 63
 #      ; word_size = 64
@@ -93,8 +106,8 @@ $ /Users/junjang/.opam/cs3110-2022fa/bin/ocamlc.opt -config > /var/folders/bl/xj
 #      ; os_type = "Unix"
 #      ; default_executable_name = "a.out"
 #      ; systhread_supported = true
-#      ; host = "aarch64-apple-darwin22.2.0"
-#      ; target = "aarch64-apple-darwin22.2.0"
+#      ; host = "x86_64-apple-darwin22.2.0"
+#      ; target = "x86_64-apple-darwin22.2.0"
 #      ; profiling = false
 #      ; flambda = false
 #      ; spacetime = false
@@ -114,14 +127,3 @@ $ /Users/junjang/.opam/cs3110-2022fa/bin/ocamlc.opt -config > /var/folders/bl/xj
 #      ; windows_unicode = false
 #      }
 #  }
-$ (cd _build/default && /Users/junjang/.opam/cs3110-2022fa/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -bin-annot -I lib/.maze_generator.objs/byte -no-alias-deps -opaque -o lib/.maze_generator.objs/byte/maze_generator.cmo -c -impl lib/maze_generator.ml)
-$ (cd _build/default && /Users/junjang/.opam/cs3110-2022fa/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -a -o lib/maze_generator.cma lib/.maze_generator.objs/byte/maze_generator.cmo)
-$ (cd _build/default && /Users/junjang/.opam/cs3110-2022fa/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -bin-annot -I bin/.main.eobjs/byte -I lib/.maze_generator.objs/byte -no-alias-deps -opaque -o bin/.main.eobjs/byte/dune__exe__Main.cmi -c -intf bin/main.mli)
-$ (cd _build/default && /Users/junjang/.opam/cs3110-2022fa/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -bin-annot -I test/.main.eobjs/byte -I /Users/junjang/.opam/cs3110-2022fa/lib/ounit2 -I /Users/junjang/.opam/cs3110-2022fa/lib/ounit2/advanced -I /Users/junjang/.opam/cs3110-2022fa/lib/seq -I /Users/junjang/.opam/cs3110-2022fa/lib/stdlib-shims -I lib/.maze_generator.objs/byte -no-alias-deps -opaque -o test/.main.eobjs/byte/dune__exe__Main.cmi -c -intf test/main.mli)
-$ (cd _build/default && /Users/junjang/.opam/cs3110-2022fa/bin/ocamlopt.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -I bin/.main.eobjs/byte -I bin/.main.eobjs/native -I lib/.maze_generator.objs/byte -I lib/.maze_generator.objs/native -intf-suffix .ml -no-alias-deps -opaque -o bin/.main.eobjs/native/dune__exe__Main.cmx -c -impl bin/main.ml)
-$ (cd _build/default && /Users/junjang/.opam/cs3110-2022fa/bin/ocamlopt.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -I test/.main.eobjs/byte -I test/.main.eobjs/native -I /Users/junjang/.opam/cs3110-2022fa/lib/ounit2 -I /Users/junjang/.opam/cs3110-2022fa/lib/ounit2/advanced -I /Users/junjang/.opam/cs3110-2022fa/lib/seq -I /Users/junjang/.opam/cs3110-2022fa/lib/stdlib-shims -I lib/.maze_generator.objs/byte -I lib/.maze_generator.objs/native -intf-suffix .ml -no-alias-deps -opaque -o test/.main.eobjs/native/dune__exe__Main.cmx -c -impl test/main.ml)
-$ (cd _build/default && /Users/junjang/.opam/cs3110-2022fa/bin/ocamlopt.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -I lib/.maze_generator.objs/byte -I lib/.maze_generator.objs/native -intf-suffix .ml -no-alias-deps -opaque -o lib/.maze_generator.objs/native/maze_generator.cmx -c -impl lib/maze_generator.ml)
-$ (cd _build/default && /Users/junjang/.opam/cs3110-2022fa/bin/ocamlopt.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -a -o lib/maze_generator.cmxa lib/.maze_generator.objs/native/maze_generator.cmx)
-$ (cd _build/default && /Users/junjang/.opam/cs3110-2022fa/bin/ocamlopt.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -shared -linkall -I lib -o lib/maze_generator.cmxs lib/maze_generator.cmxa)
-$ (cd _build/default && /Users/junjang/.opam/cs3110-2022fa/bin/ocamlopt.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -o bin/main.exe lib/maze_generator.cmxa bin/.main.eobjs/native/dune__exe__Main.cmx)
-$ (cd _build/default && /Users/junjang/.opam/cs3110-2022fa/bin/ocamlopt.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -o test/main.exe /Users/junjang/.opam/cs3110-2022fa/lib/ocaml/unix.cmxa -I /Users/junjang/.opam/cs3110-2022fa/lib/ocaml -I /Users/junjang/.opam/cs3110-2022fa/lib/ocaml /Users/junjang/.opam/cs3110-2022fa/lib/stdlib-shims/stdlib_shims.cmxa /Users/junjang/.opam/cs3110-2022fa/lib/ounit2/advanced/oUnitAdvanced.cmxa /Users/junjang/.opam/cs3110-2022fa/lib/ounit2/oUnit.cmxa lib/maze_generator.cmxa test/.main.eobjs/native/dune__exe__Main.cmx)

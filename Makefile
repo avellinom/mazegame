@@ -14,25 +14,11 @@ utop:
 test:
 	OCAMLRUNPARAM=b dune exec test/main.exe
 
-play:
+run:
+	dune build
 	OCAMLRUNPARAM=b dune exec bin/main.exe
-
-check:
-	@bash check.sh
-
-finalcheck:
-	@bash check.sh final
-
-zip:
-	rm -f maze_generator.zip
-	zip -r maze_generator.zip . -x@exclude.lst
 
 clean:
 	dune clean
 	rm -f maze_generator.zip
 
-doc:
-	dune build @doc
-
-opendoc: doc
-	@bash opendoc.sh

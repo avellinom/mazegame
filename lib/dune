@@ -1,2 +1,3 @@
 (library
- (name maze_generator))
+ (name maze_generator)
+ (public_name MazeGenerator))
