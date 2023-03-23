@@ -1,0 +1,28 @@
+---
+# Members of your group.
+group:
+  - name: Michael Avellino
+    netid: mca63
+  - name: Alexey Elkin
+    netid: ae339
+  - name: Jun Jang
+    netid: jj578
+# Your PM.
+pm:
+  name: Sydney Tran
+  netid: sdt35
+# Set to false if you don't want your gallery entry to be public.
+publish: true
+# Pithy title
+title: "An Interactive Maze Game with Collectables"
+# OK if this is a Cornell Github link, but public gallery viewers won't be able to see it.
+git-repo: "https://github.coecis.cornell.edu/jj578/maze_generator"
+# If you have no demo screencast, replace the url string with an empty string ""
+demo-video-url: ""
+# Write a short, attention-grabbing description of your project.
+desc: >
+  Our project is an interactive maze game. The game contains randomly-generated
+  images that the user can collect as they progress through a maze. The mazes 
+  are predetermined by text files, and multiple mazes are accessible to the
+  user. Upon successful completion of the maze, the user will be able to see 
+  all the images they collected along the way. Images are always unique.
