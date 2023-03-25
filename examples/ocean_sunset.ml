@@ -11,7 +11,7 @@ let random_ocean x y =
   fill_circle x y size
 
 let random_sun x y =
-  print_endline (string_of_int (y - (size_y () / 3)));
+  (* print_endline (string_of_int (y - (size_y () / 3))); *)
   let r = Random.full_int (555 - (y - (size_y () / 3)) - 50) + 50 in
   let g = Random.full_int (300 - (y - (size_y () / 3))) in
   let size = Random.int 6 in
