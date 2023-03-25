@@ -1,12 +1,12 @@
 # Install Guide
 Run the following commands in terminal to install/use the maze generator:
 
-1. Install the graphics module. You may be prompted to enter your password:
+1. Install the graphics module:
 
     `$ opam install graphics`
 
 2. Install other required packages as listed from the previous command.
-These may include pressing "y" and 
+These may include pressing "y" and the command:
 
     `$ opam user-setup install`
 ***
