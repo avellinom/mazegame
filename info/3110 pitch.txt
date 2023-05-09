@@ -1,0 +1,5 @@
+Creating art images: Procedural Generator
+
+The program will randomly generate an image based on user input. A range of keywords will be provided  for the user to choose, mostly adjectives and nouns. Image generated will not be based on the words literally (e.g. the user types cloud -> image includes cloud) but rather on abstract words like mood (e.g. happy, chilly etc.). Image will mostly likely be produced by pattern matching, using adverbs and adjectives as the strength of each value corresponding to color scheme, for instance. An easy goal would be just generating a color image. A medium goal would be to include geometric patterns and life-like images. A stretch goal would be to connect google search into the program and incorporate those images as a final art piece.
+
+Or it could be a line art, using vector calculus... I think that would be more mathematically oriented and would be a good starting point.

@@ -1,4 +1,4 @@
-.PHONY: test check
+.PHONY: test play check
 
 build:
 	dune build
@@ -8,15 +8,15 @@ code:
 	code .
 	! dune build --watch
 
-utop:
-	OCAMLRUNPARAM=b dune utop lib
+# TODO: currently not working, will resolve later
+# utop:
+# 	OCAMLRUNPARAM=b dune utop lib
+
+play:
+	OCAMLRUNPARAM=b dune exec play/main.exe
 
 test:
 	OCAMLRUNPARAM=b dune exec test/main.exe
-
-run:
-	dune build
-	OCAMLRUNPARAM=b dune exec bin/main.exe
 
 clean:
 	dune clean

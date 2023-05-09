@@ -1,3 +1,4 @@
 (library
  (name maze)
- (public_name MazeGame))
+ (public_name Maze)
+ (libraries graphics))
