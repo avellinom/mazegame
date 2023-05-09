@@ -12,6 +12,8 @@ code:
 # utop:
 # 	OCAMLRUNPARAM=b dune utop lib
 
+# Jun: you can add an image target here if you would like
+
 play:
 	OCAMLRUNPARAM=b dune exec play/main.exe
 
