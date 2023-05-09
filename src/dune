@@ -1,4 +1,3 @@
 (library
  (name maze)
- (public_name Maze)
- (libraries graphics))
+ (public_name Maze))

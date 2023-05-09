@@ -1,4 +1,5 @@
 open Graphics
+(** This executable provides an area to test out image generation. *)
 
 let blink_dot () =
   let c = rgb 255 255 0 in

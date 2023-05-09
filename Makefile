@@ -1,4 +1,4 @@
-.PHONY: test play check
+.PHONY: test play check image
 
 build:
 	dune build
@@ -12,7 +12,8 @@ code:
 # utop:
 # 	OCAMLRUNPARAM=b dune utop lib
 
-# Jun: you can add an image target here if you would like
+image:
+	OCAMLRUNPARAM=b dune exec image/main.exe
 
 play:
 	OCAMLRUNPARAM=b dune exec play/main.exe

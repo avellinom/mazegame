@@ -1,5 +1,5 @@
 open Maze;;
-(** This is where the game begins. *)
+(** This executable begins the game. *)
 
 
 print_endline "Game started"
