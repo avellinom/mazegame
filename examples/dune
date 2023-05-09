@@ -1,0 +1,3 @@
+(executables
+ (names dot random_cubism ocean_sunset)
+ (libraries graphics))
