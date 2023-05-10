@@ -66,7 +66,7 @@ let move_up (c : t) : t = move_user c Up
 let move_down (c : t) : t = move_user c Down
 
 (** A helper function to print the current state of the maze. *)
-let print_maze (maze : Maze.entry array array) : unit =
+let print_maze_array (maze : maze_array) : unit =
   let print_maze_row row =
     (* helper function to print each row of the matrix *)
     Array.iter
@@ -81,4 +81,4 @@ let print_maze (maze : Maze.entry array array) : unit =
 
 let print_game (c : t) : unit =
   match c with
-  | { mz_array; user_location; user } -> print_maze mz_array
+  | { mz_array; user_location; user } -> print_maze_array mz_array
