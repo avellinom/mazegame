@@ -4,3 +4,8 @@ Run the following commands in terminal to install/use the maze generator:
 1. Run the code:
 
     `$ make run`
+
+
+Notes for when we remake this
+    - Graphics library dependency
+    - ANSII library dependency
