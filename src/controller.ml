@@ -30,12 +30,14 @@ let start_game (filename : string) (username : string) : t =
       { mz_array; user_location = (0, 0); user = usr }
   | false -> failwith "Error creating maze. "
 
+(** Users can move only one space in one of these four directions. *)
 type move =
   | Left
   | Right
   | Up
   | Down
 
+(** Helper function to move a user to an adjacent location. *)
 let move_user (c : t) (move : move) : t =
   let x_diff, y_diff =
     match move with
