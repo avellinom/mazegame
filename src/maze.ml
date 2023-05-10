@@ -1,10 +1,13 @@
 type entry =
   | Free
   | Wall
-(* TODO: add image later *)
+  | Person of User.t
 
+type location = int * int
 type t = entry array array
 
+(** [to_list f] converts a filename f into a list of strings where each element
+    of the list is a row of the file. *)
 let to_list (filename : string) : string list =
   try
     let file = open_in filename in
@@ -17,6 +20,12 @@ let to_list (filename : string) : string list =
     let reversed_order = fill_list [] in
     List.rev reversed_order
   with Sys_error _ -> failwith "File does not exist."
+
+let char_of_entry (e : entry) : char =
+  match e with
+  | Free -> ' '
+  | Wall -> '#'
+  | Person _ -> 'p'
 
 let maze_of_file (filename : string) : t =
   let string_list = to_list filename in
@@ -33,7 +42,7 @@ let maze_of_file (filename : string) : t =
             match new_entry with
             | ' ' -> Free
             | '#' -> Wall
-            | _ -> failwith "Todo write err for bad entry"
+            | _ -> failwith "Maze entry is not a space of a hash."
           in
           matrix.(row_count).(col_count) <- variant_entry
         done;
@@ -43,16 +52,24 @@ let maze_of_file (filename : string) : t =
   row_loop string_list 0;
   matrix
 
-let print_maze (maze : t) : unit =
-  let print_maze_row row =
-    (* helper function to print each row of the matrix *)
-    Array.iter
-      (fun entry ->
-        match entry with
-        | Free -> print_char ' '
-        | Wall -> print_char 'W')
-      row;
-    print_endline ""
-  in
-  print_endline "";
-  Array.iter (fun array -> print_maze_row array) maze
+let get_num_rows (m : t) : int = Array.length m
+let get_num_cols (m : t) : int = Array.length m.(0)
+
+let array_of_maze (m : t) : entry array array =
+  let num_rows = get_num_rows m in
+  let num_cols = get_num_cols m in
+  let new_array = Array.make_matrix num_rows num_cols Free in
+  for row_i = 0 to num_rows - 1 do
+    new_array.(row_i) <- Array.copy m.(row_i)
+  done;
+  new_array
+
+let hashtable_of_maze (m : t) : (location, entry) Hashtbl.t =
+  let hashtable = Hashtbl.create (get_num_rows m * get_num_cols m) in
+  Array.iteri
+    (fun row_i row ->
+      Array.iteri
+        (fun col_i entry -> Hashtbl.add hashtable (row_i, col_i) entry)
+        row)
+    m;
+  hashtable

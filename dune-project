@@ -1,3 +1,3 @@
 (lang dune 3.7)
 
-(name rml)
+(name mazegame)

@@ -1,4 +1,4 @@
-open Maze
+open Controller
 open ANSITerminal
 
 (** Supported sizes for the world. *)
