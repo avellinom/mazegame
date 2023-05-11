@@ -6,8 +6,8 @@ type t = {
   user : User.t;
 }
 
-(** A helper function that determines whether a location is 'Free' in the
-    hashmap. *)
+(** [location_is_free arr loc] determines whether a location is [Maze.Free] in
+    [arr].*)
 let location_is_free (mz_array : maze_array) (loc : Maze.location) : bool =
   match loc with
   | x, y
@@ -30,14 +30,16 @@ let start_game (filename : string) (username : string) : t =
       { mz_array; user_location = (0, 0); user = usr }
   | false -> failwith "Error creating maze. "
 
-(** Users can move only one space in one of these four directions. *)
+(** [move] represents the directions in which a user can make a move by one maze
+    location. *)
 type move =
   | Left
   | Right
   | Up
   | Down
 
-(** Helper function to move a user to an adjacent location. *)
+(** [move_user c move] returns a new controller which is the same as c but with
+    the user updated to a new location in direction [move]. *)
 let move_user (c : t) (move : move) : t =
   let x_diff, y_diff =
     match move with
@@ -65,8 +67,9 @@ let move_right (c : t) : t = move_user c Right
 let move_up (c : t) : t = move_user c Up
 let move_down (c : t) : t = move_user c Down
 
-(** A helper function to print the current state of the maze. *)
-let print_maze_array (maze : maze_array) : unit =
+(** [print_maze arr] prints out the contents of an array [arr] representation of
+    a maze. *)
+let print_maze (maze : Maze.entry array array) : unit =
   let print_maze_row row =
     (* helper function to print each row of the matrix *)
     Array.iter
@@ -81,4 +84,4 @@ let print_maze_array (maze : maze_array) : unit =
 
 let print_game (c : t) : unit =
   match c with
-  | { mz_array; user_location; user } -> print_maze_array mz_array
+  | { mz_array; user_location; user } -> print_maze mz_array
