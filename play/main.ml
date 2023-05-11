@@ -160,7 +160,8 @@ and perform_instruction (input : instruction) : unit =
       let game_ctrl = Controller.start_game filepath "todo: some user name" in
       print_string [ console_subcolor ]
         "Here is the maze. Note that you are 'p' and start in the top left \
-         corner.";
+         corner.\n\
+         Your goal is to make it to G.";
       let first_move_dir = process_raw_movement game_ctrl in
       perform_movement game_ctrl first_move_dir
   | Quit -> stop_console_msg ()
