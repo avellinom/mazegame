@@ -6,6 +6,8 @@ type t = {
   user : User.t;
 }
 
+exception InvalidMove
+
 (** [location_is_free arr loc] determines whether a location is [Maze.Free] in
     [arr].*)
 let location_is_free (mz_array : maze_array) (loc : Maze.location) : bool =
@@ -38,8 +40,9 @@ type move =
   | Up
   | Down
 
-(** [move_user c move] returns a new controller which is the same as c but with
-    the user updated to a new location in direction [move]. *)
+(** [move_user c move] returns a new controller, which is the same as c but with
+    the user updated to a new location in direction [move]. Raises: InvalidMove
+    if the move is not possible (e.g., moving into a wall or off the grid). *)
 let move_user (c : t) (move : move) : t =
   let x_diff, y_diff =
     match move with
@@ -60,7 +63,7 @@ let move_user (c : t) (move : move) : t =
           mz_array.(x).(y) <- Free;
           mz_array.(x').(y') <- Person user;
           { c with user_location = (x', y') }
-      | false -> c)
+      | false -> raise InvalidMove)
 
 let move_left (c : t) : t = move_user c Left
 let move_right (c : t) : t = move_user c Right
@@ -69,7 +72,7 @@ let move_down (c : t) : t = move_user c Down
 
 (** [print_maze arr] prints out the contents of an array [arr] representation of
     a maze. *)
-let print_maze (maze : Maze.entry array array) : unit =
+let print_maze (maze : maze_array) : unit =
   let print_maze_row row =
     (* helper function to print each row of the matrix *)
     Array.iter
@@ -81,6 +84,21 @@ let print_maze (maze : Maze.entry array array) : unit =
   in
   print_endline "";
   Array.iter (fun array -> print_maze_row array) maze
+
+let string_of_game (c : t) : string =
+  match c with
+  | { mz_array; user_location; user } ->
+      let buffer = Buffer.create 16 in
+      Array.iter
+        (fun row ->
+          Array.iter
+            (fun entry ->
+              let char_entry = Maze.char_of_entry entry in
+              Buffer.add_char buffer char_entry)
+            row;
+          Buffer.add_char buffer '\n')
+        mz_array;
+      Buffer.contents buffer
 
 let print_game (c : t) : unit =
   match c with
