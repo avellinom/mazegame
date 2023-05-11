@@ -7,5 +7,5 @@ Run the following commands in terminal to install/use the maze generator:
 
 
 Notes for when we remake this
-    - Graphics library dependency
-    - ANSII library dependency
+    - Graphics library for images
+    - ANSII library for pretty printing

@@ -20,6 +20,9 @@ let console_color : ANSITerminal.style = red
 (* The supplemental color of the console. *)
 let console_subcolor : style = magenta
 
+(* The color that the maze is displayed in. *)
+let maze_displaycolor : style = blue
+
 (** [begin_console ()] begins the console. It displays the initial instructions
     of the game to the user. *)
 let begin_console () : unit =
@@ -57,7 +60,7 @@ let rec process_raw_selection () : instruction =
   | exception End_of_file ->
       bad_request_msg ();
       process_raw_selection ()
-  | s -> (
+  | s -> begin
       let split_s = String.split_on_char ' ' s in
       let s_lst_no_spaces = List.filter (fun e -> String.empty <> e) split_s in
       match s_lst_no_spaces with
@@ -69,7 +72,7 @@ let rec process_raw_selection () : instruction =
               | "large" -> Play Large
               | _ ->
                   print_string [ console_subcolor ]
-                    "This maze size is not available. Available sizes are \
+                    "That maze size is not available. Available sizes are \
                      {small, large}. ";
                   process_raw_selection ()
             end
@@ -80,9 +83,54 @@ let rec process_raw_selection () : instruction =
       | [ "quit" ] -> Quit
       | _ ->
           bad_request_msg ();
-          process_raw_selection ())
+          process_raw_selection ()
+    end
 
-let rec process_movement (game_ctrl : Controller.t) : unit = failwith "todo"
+(** The user can move in 4 directions to traverse the maze. *)
+type direction =
+  | Left
+  | Right
+  | Up
+  | Down
+
+(** [process_raw_movement c] prompts the user for input and returns the
+    direction in which they want to move. *)
+let rec process_raw_movement (game_ctrl : Controller.t) : direction =
+  Controller.print_game game_ctrl maze_displaycolor;
+  print_string [ console_subcolor ]
+    "Where would you like to go? Hit `a` for left, `d` for right, `w` for up, \
+     and `s` for down.";
+  print_string [ console_subcolor ] "> ";
+  match read_line () with
+  | exception End_of_file ->
+      bad_request_msg ();
+      process_raw_movement game_ctrl
+  | direction -> begin
+      let cleaned_direction = String.lowercase_ascii direction in
+      match cleaned_direction with
+      | "a" -> Left
+      | "d" -> Right
+      | "w" -> Up
+      | "s" -> Down
+      | _ ->
+          print_string [ console_subcolor ]
+            "That direction is not available. Available sizes are {left, \
+             right, up, down}.";
+          process_raw_movement game_ctrl
+    end
+
+let rec perform_movement (game_ctrl : Controller.t) (dir : direction) : unit =
+  try
+    let game_ctrl' =
+      match dir with
+      | Left -> Controller.move_left game_ctrl
+      | Right -> Controller.move_right game_ctrl
+      | Up -> Controller.move_up game_ctrl
+      | Down -> Controller.move_down game_ctrl
+    in
+    let dir' = process_raw_movement game_ctrl' in
+    perform_movement game_ctrl' dir'
+  with e -> failwith "thrown"
 
 (** [perform_instruction i] performs instruction i. It either starts the game of
     quits the console. *)
@@ -97,7 +145,11 @@ let perform_instruction (input : instruction) : unit =
       in
       let filepath = data_dir_prefix ^ maze_size in
       let game_ctrl = Controller.start_game filepath "todo: some user name" in
-      process_movement game_ctrl
+      print_string [ console_subcolor ]
+        "Here is the maze. Note that you are 'p' and start in the top left \
+         corner.";
+      let first_move_dir = process_raw_movement game_ctrl in
+      perform_movement game_ctrl first_move_dir
   | Quit -> stop_console_msg ()
 
 (* Begin the Maze Game console. *)

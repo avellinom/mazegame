@@ -88,6 +88,5 @@ let string_of_game (c : t) : string =
 let print_game (c : t) (color_style : ANSITerminal.style) : unit =
   match c with
   | { mz_array; user_location; user } ->
-      print_endline "";
       let board_string = string_of_game c in
-      ANSITerminal.print_string [ color_style ] board_string
+      ANSITerminal.print_string [ color_style ] ("\n" ^ board_string)
