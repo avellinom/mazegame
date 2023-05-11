@@ -25,3 +25,9 @@ clean:
 	dune clean
 	rm -f maze_generator.zip
 
+doc:
+	dune build @doc
+
+opendoc:
+	@bash opendoc.sh
+
