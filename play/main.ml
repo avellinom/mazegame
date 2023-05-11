@@ -4,10 +4,11 @@ open ANSITerminal
 (** The common prefix for reading from files. *)
 let data_dir_prefix : string = "data" ^ Filename.dir_sep
 
-(** Supported sizes for the world. *)
+(** Supported sizes for the maze. *)
 type size =
   | Small
   | Large
+  | Empty
 
 (** The console accepts inputs of this form. *)
 type instruction =
@@ -70,6 +71,7 @@ let rec process_raw_selection () : instruction =
               match value with
               | "small" -> Play Small
               | "large" -> Play Large
+              | "empty" -> Play Empty
               | _ ->
                   print_string [ console_subcolor ]
                     "That maze size is not available. Available sizes are \
@@ -152,6 +154,7 @@ and perform_instruction (input : instruction) : unit =
         match sz with
         | Small -> "small.mz"
         | Large -> "large.mz"
+        | Empty -> "empty.mz"
       in
       let filepath = data_dir_prefix ^ maze_size in
       let game_ctrl = Controller.start_game filepath "todo: some user name" in
