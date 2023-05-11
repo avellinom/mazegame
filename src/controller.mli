@@ -6,7 +6,7 @@ val start_game : string -> string -> t
 (** [start_game f s] starts a game by generating a maze from file f and creating
     a user of name s. Raises: [Failure] if f is not a valid maze file. *)
 
-val print_game : t -> unit
+val print_game : t -> ANSITerminal.style -> unit
 (** [print_game c] prints the state of the game to the command line. *)
 
 val string_of_game : t -> string

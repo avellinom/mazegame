@@ -70,21 +70,6 @@ let move_right (c : t) : t = move_user c Right
 let move_up (c : t) : t = move_user c Up
 let move_down (c : t) : t = move_user c Down
 
-(** [print_maze arr] prints out the contents of an array [arr] representation of
-    a maze. *)
-let print_maze (maze : maze_array) : unit =
-  let print_maze_row row =
-    (* helper function to print each row of the matrix *)
-    Array.iter
-      (fun entry ->
-        let char_entry = Maze.char_of_entry entry in
-        print_char char_entry)
-      row;
-    print_endline ""
-  in
-  print_endline "";
-  Array.iter (fun array -> print_maze_row array) maze
-
 let string_of_game (c : t) : string =
   match c with
   | { mz_array; user_location; user } ->
@@ -100,6 +85,9 @@ let string_of_game (c : t) : string =
         mz_array;
       Buffer.contents buffer
 
-let print_game (c : t) : unit =
+let print_game (c : t) (color_style : ANSITerminal.style) : unit =
   match c with
-  | { mz_array; user_location; user } -> print_maze mz_array
+  | { mz_array; user_location; user } ->
+      print_endline "";
+      let board_string = string_of_game c in
+      ANSITerminal.print_string [ color_style ] board_string

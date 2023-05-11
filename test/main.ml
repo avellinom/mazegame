@@ -34,7 +34,7 @@ let make_game (typ : maze_type) : Controller.t =
     creates a test with name n. *)
 let valid_game_test (name : string) (game_ctrl : Controller.t)
     (print_state : bool) : test =
-  if print_state then print_game game_ctrl;
+  if print_state then print_game game_ctrl ANSITerminal.blue;
   name >:: fun _ -> assert_equal true true
 
 let controller_tests =
@@ -47,7 +47,7 @@ let controller_tests =
       false;
     valid_game_test "User can move down on small maze"
       (make_game Small |> move_right |> move_down |> move_right)
-      false;
+      true;
     ( "User cannot move into wall on small maze" >:: fun _ ->
       assert_raises InvalidMove (fun () ->
           make_game Small |> move_right |> move_right |> move_right) );
