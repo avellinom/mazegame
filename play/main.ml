@@ -1,6 +1,9 @@
 open Controller
 open ANSITerminal
 
+(** The common prefix for reading from files. *)
+let data_dir_prefix : string = "data" ^ Filename.dir_sep
+
 (** Supported sizes for the world. *)
 type size =
   | Small
@@ -79,12 +82,22 @@ let rec process_raw_selection () : instruction =
           bad_request_msg ();
           process_raw_selection ())
 
+let rec process_movement (game_ctrl : Controller.t) : unit = failwith "todo"
+
 (** [perform_instruction i] performs instruction i. It either starts the game of
     quits the console. *)
 let perform_instruction (input : instruction) : unit =
   print_string [ console_color ] "Instruction received.\n";
   match input with
-  | Play sz -> failwith "Start game here"
+  | Play sz ->
+      let maze_size =
+        match sz with
+        | Small -> "small.mz"
+        | Large -> "large.mz"
+      in
+      let filepath = data_dir_prefix ^ maze_size in
+      let game_ctrl = Controller.start_game filepath "todo: some user name" in
+      process_movement game_ctrl
   | Quit -> stop_console_msg ()
 
 (* Begin the Maze Game console. *)
