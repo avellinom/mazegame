@@ -27,7 +27,7 @@ let char_of_entry (e : entry) : char =
   | Wall -> '#'
   | Person _ -> 'p'
 
-let maze_of_file (filename : string) : t =
+let make (filename : string) : t =
   let string_list = to_list filename in
   let num_rows = List.length string_list in
   let num_cols = string_list |> List.hd |> String.length in
@@ -55,15 +55,6 @@ let maze_of_file (filename : string) : t =
 let get_num_rows (m : t) : int = Array.length m
 let get_num_cols (m : t) : int = Array.length m.(0)
 
-let array_of_maze (m : t) : entry array array =
-  let num_rows = get_num_rows m in
-  let num_cols = get_num_cols m in
-  let new_array = Array.make_matrix num_rows num_cols Free in
-  for row_i = 0 to num_rows - 1 do
-    new_array.(row_i) <- Array.copy m.(row_i)
-  done;
-  new_array
-
 let hashtable_of_maze (m : t) : (location, entry) Hashtbl.t =
   let hashtable = Hashtbl.create (get_num_rows m * get_num_cols m) in
   Array.iteri
@@ -73,3 +64,12 @@ let hashtable_of_maze (m : t) : (location, entry) Hashtbl.t =
         row)
     m;
   hashtable
+
+let array_of_maze (m : t) : entry array array =
+  let num_rows = get_num_rows m in
+  let num_cols = get_num_cols m in
+  let new_array = Array.make_matrix num_rows num_cols Free in
+  for row_i = 0 to num_rows - 1 do
+    new_array.(row_i) <- Array.copy m.(row_i)
+  done;
+  new_array

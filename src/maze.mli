@@ -9,14 +9,14 @@ type location = int * int
 type t
 (** [t] is the abstract type representing a maze. *)
 
-val char_of_entry : entry -> char
-(** [char_of_entry e] converts an entry of the maze e into a char
-    representation. *)
-
-val maze_of_file : string -> t
+val make : string -> t
 (** [maze_of_file f] creates a maze type from file f. Raises: [Failure] if f
     does not exist or if the maze file does not properly contain only spaces and
     hashes. *)
+
+val char_of_entry : entry -> char
+(** [char_of_entry e] converts an entry of the maze e into a char
+    representation. *)
 
 val hashtable_of_maze : t -> (location, entry) Hashtbl.t
 (** [hashtable_of_maze m] returns a hashtable form of the maze. *)

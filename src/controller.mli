@@ -10,13 +10,17 @@ val print_game : t -> unit
 (** [print_game c] prints the state of the game to the command line. *)
 
 val move_left : t -> t
-(** [move_left c] moves the user on the maze left once. *)
+(** [move_left c] moves the user on the maze left once. Returns a controller
+    identical for c except for that movement. *)
 
 val move_right : t -> t
-(** [move_right c] moves the user on the maze right once. *)
+(** [move_right c] moves the user on the maze right once. Returns a controller
+    identical for c except for that movement. *)
 
 val move_up : t -> t
-(** [move_up c] moves the user on the maze up once. *)
+(** [move_up c] moves the user on the maze up once. Returns a controller
+    identical for c except for that movement. *)
 
 val move_down : t -> t
-(** [move_down c] moves the user on the maze up once. *)
+(** [move_down c] moves the user on the maze up once. Returns a controller
+    identical for c except for that movement. *)
