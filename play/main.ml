@@ -130,15 +130,21 @@ let rec perform_movement (game_ctrl : Controller.t) (dir : direction) : unit =
     in
     let dir' = process_raw_movement game_ctrl' in
     perform_movement game_ctrl' dir'
-  with e ->
-    print_string [ console_subcolor ]
-      "That move is not in bounds. Please try again.\n";
-    let dir' = process_raw_movement game_ctrl in
-    perform_movement game_ctrl dir'
+  with
+  | InvalidMove ->
+      print_string [ console_subcolor ]
+        "That move is not in bounds. Please try again.\n";
+      let dir' = process_raw_movement game_ctrl in
+      perform_movement game_ctrl dir'
+  | MazeSolved ->
+      print_string [ console_color ]
+        "Congratulations! You won the Maze Game. Welcome back to the console.\n";
+      let user_instruction = process_raw_selection () in
+      perform_instruction user_instruction
 
 (** [perform_instruction i] performs instruction i. It either starts the game of
     quits the console. *)
-let perform_instruction (input : instruction) : unit =
+and perform_instruction (input : instruction) : unit =
   print_string [ console_color ] "Instruction received.\n";
   match input with
   | Play sz ->

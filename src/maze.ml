@@ -1,10 +1,18 @@
 type entry =
   | Free
   | Wall
+  | Goal
   | Person of User.t
 
 type location = int * int
 type t = entry array array
+
+let char_of_entry (e : entry) : char =
+  match e with
+  | Free -> ' '
+  | Wall -> '#'
+  | Goal -> 'G'
+  | Person _ -> 'p'
 
 (** [to_list f] converts a filename f into a list of strings where each element
     of the list is a row of the file. *)
@@ -21,12 +29,6 @@ let to_list (filename : string) : string list =
     List.rev reversed_order
   with Sys_error _ -> failwith "File does not exist."
 
-let char_of_entry (e : entry) : char =
-  match e with
-  | Free -> ' '
-  | Wall -> '#'
-  | Person _ -> 'p'
-
 let make (filename : string) : t =
   let string_list = to_list filename in
   let num_rows = List.length string_list in
@@ -42,6 +44,7 @@ let make (filename : string) : t =
             match new_entry with
             | ' ' -> Free
             | '#' -> Wall
+            | 'G' -> Goal
             | _ -> failwith "Maze entry is not a space of a hash."
           in
           matrix.(row_count).(col_count) <- variant_entry

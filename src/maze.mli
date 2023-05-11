@@ -1,6 +1,7 @@
 type entry =
   | Free
   | Wall
+  | Goal
   | Person of User.t  (** [entry] is the type representing a maze entry. *)
 
 type location = int * int

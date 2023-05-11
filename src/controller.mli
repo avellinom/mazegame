@@ -16,6 +16,10 @@ exception InvalidMove
 (** Raised when a move is not legal. For example, moving off the maze or into a
     wall. *)
 
+exception MazeSolved
+(** Raised immediately after the user move to the bottom-right-most square in
+    the maze. *)
+
 val move_left : t -> t
 (** [move_left c] moves the user on the maze left once. Returns a controller,
     identical for c except for that movement. Raises: InvalidMove if the

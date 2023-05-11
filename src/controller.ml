@@ -7,6 +7,7 @@ type t = {
 }
 
 exception InvalidMove
+exception MazeSolved
 
 (** [location_is_free arr loc] determines whether a location is [Maze.Free] in
     [arr].*)
@@ -18,6 +19,7 @@ let location_is_free (mz_array : maze_array) (loc : Maze.location) : bool =
          && y < Maze.get_num_cols mz_array -> begin
       match mz_array.(x).(y) with
       | Free -> true
+      | Goal -> true
       | _ -> false
     end
   | _ -> false
@@ -65,10 +67,18 @@ let move_user (c : t) (move : move) : t =
           { c with user_location = (x', y') }
       | false -> raise InvalidMove)
 
-let move_left (c : t) : t = move_user c Left
-let move_right (c : t) : t = move_user c Right
-let move_up (c : t) : t = move_user c Up
-let move_down (c : t) : t = move_user c Down
+let check_solved (c : t) : t =
+  match c with
+  | { mz_array; user_location; user } ->
+      let bottom_right_index =
+        (Maze.get_num_rows mz_array - 1, Maze.get_num_cols mz_array - 1)
+      in
+      if bottom_right_index = user_location then raise MazeSolved else c
+
+let move_left (c : t) : t = check_solved (move_user c Left)
+let move_right (c : t) : t = check_solved (move_user c Right)
+let move_up (c : t) : t = check_solved (move_user c Up)
+let move_down (c : t) : t = check_solved (move_user c Down)
 
 let string_of_game (c : t) : string =
   match c with
