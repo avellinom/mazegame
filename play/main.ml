@@ -130,7 +130,11 @@ let rec perform_movement (game_ctrl : Controller.t) (dir : direction) : unit =
     in
     let dir' = process_raw_movement game_ctrl' in
     perform_movement game_ctrl' dir'
-  with e -> failwith "thrown"
+  with e ->
+    print_string [ console_subcolor ]
+      "That move is not in bounds. Please try again.\n";
+    let dir' = process_raw_movement game_ctrl in
+    perform_movement game_ctrl dir'
 
 (** [perform_instruction i] performs instruction i. It either starts the game of
     quits the console. *)
