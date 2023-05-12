@@ -157,7 +157,10 @@ and perform_instruction (input : instruction) : unit =
         | Empty -> "empty.mz"
       in
       let filepath = data_dir_prefix ^ maze_size in
-      let game_ctrl = Controller.start_game filepath "todo: some user name" in
+      let game_ctrl =
+        Controller.start_game filepath "todo: some user name"
+          10 (* TODO: CHANGE THESE INPUTS *)
+      in
       print_string [ console_subcolor ]
         "Here is the maze. Note that you are 'p' and start in the top left \
          corner.\n\
