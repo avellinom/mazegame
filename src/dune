@@ -1,4 +1,4 @@
 (library
  (name controller)
- (libraries ANSITerminal)
+ (libraries ANSITerminal graphics)
  (public_name Controller))
