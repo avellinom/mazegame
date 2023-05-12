@@ -60,8 +60,8 @@ let controller_tests =
     valid_game_test "User can move down on small maze"
       (make_game Small 0 |> move_right |> move_down |> move_right)
       false;
-    invalid_move_game_test "User cannot move into right wall on small maze"
-      (fun () -> make_game Small 0 |> move_right |> move_right |> move_right);
+    invalid_move_game_test "User cannot move into wall" (fun () ->
+        make_game Small 0 |> move_right |> move_right |> move_right);
     solved_game_test
       "Empty maze is easily solvable by tracing left and bottom edges"
       (fun () ->
@@ -77,6 +77,15 @@ let controller_tests =
       (fun () ->
         make_game Empty 10000 |> move_right |> move_right |> move_right
         |> move_right |> move_down |> move_down |> move_down);
+    invalid_move_game_test "User cannot move into wall on their right"
+      (fun () -> make_game Empty 0 |> move_down |> move_right |> move_right);
+    invalid_move_game_test "User cannot move into wall beneath them" (fun () ->
+        make_game Empty 0 |> move_right |> move_right |> move_down);
+    invalid_move_game_test "User cannot move into wall on their left" (fun () ->
+        make_game Empty 0 |> move_right |> move_right |> move_right |> move_down
+        |> move_left);
+    invalid_move_game_test "User cannot move into wall on their right"
+      (fun () -> make_game Empty 0 |> move_down |> move_right |> move_right);
   ]
 
 let tests = "test suite for MS2" >::: List.flatten [ controller_tests ]
