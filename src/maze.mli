@@ -2,6 +2,7 @@ type entry =
   | Free
   | Wall
   | Goal
+  | Picture of Image.t
   | Person of User.t  (** [entry] is the type representing a maze entry. *)
 
 type location = int * int
@@ -21,7 +22,7 @@ val char_of_entry : entry -> char
 
 val hashtable_of_maze : t -> (location, entry) Hashtbl.t
 (** [hashtable_of_maze m] returns a hashtable form of the maze. *)
-(** TODO: deprecate ?*)
+(* TODO: deprecate ?*)
 
 val array_of_maze : t -> entry array array
 (** [array_of_maze m] returns maze m as a 2D array. *)
@@ -31,3 +32,8 @@ val get_num_rows : entry array array -> int
 
 val get_num_cols : entry array array -> int
 (** [get_num_cols m] returns the number of columns in 2D matrix m. *)
+
+val generate_images : t -> int -> t
+(** [generate_images m p] generates random images and places them at random
+    locations that are available in maze m. p is the approximate amount of
+    images to be dropped on the maze. *)

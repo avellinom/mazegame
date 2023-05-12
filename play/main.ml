@@ -101,7 +101,7 @@ let rec process_raw_movement (game_ctrl : Controller.t) : direction =
   Controller.print_game game_ctrl maze_displaycolor;
   print_string [ console_subcolor ]
     "Where would you like to go? Hit `a` for left, `d` for right, `w` for up, \
-     and `s` for down.";
+     and `s` for down.\n";
   print_string [ console_subcolor ] "> ";
   match read_line () with
   | exception End_of_file ->

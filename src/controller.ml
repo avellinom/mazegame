@@ -20,19 +20,21 @@ let location_is_free (mz_array : maze_array) (loc : Maze.location) : bool =
       match mz_array.(x).(y) with
       | Free -> true
       | Goal -> true
+      | Picture _ -> true
       | _ -> false
     end
   | _ -> false
 
 let start_game (filename : string) (username : string) : t =
   let mz = Maze.make filename in
-  let mz_array = Maze.array_of_maze mz in
+  let mz' = Maze.generate_images mz 5 in
+  let mz_array = Maze.array_of_maze mz' in
   let usr = User.make username in
   match location_is_free mz_array (0, 0) with
   | true ->
       mz_array.(0).(0) <- Person usr;
       { mz_array; user_location = (0, 0); user = usr }
-  | false -> failwith "Error creating maze. "
+  | false -> failwith "Error creating maze."
 
 (** [move] represents the directions in which a user can make a move by one maze
     location. *)
