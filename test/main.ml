@@ -1,4 +1,5 @@
 open OUnit2
+open Lib
 open Controller
 
 let data_dir_prefix : string = "data" ^ Filename.dir_sep

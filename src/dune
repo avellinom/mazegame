@@ -1,4 +1,3 @@
 (library
- (name controller)
- (libraries ANSITerminal graphics)
- (public_name Controller))
+ (name lib)
+ (libraries ANSITerminal graphics))

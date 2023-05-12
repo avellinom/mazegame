@@ -1,3 +1,4 @@
+open Lib
 open Controller
 open ANSITerminal
 

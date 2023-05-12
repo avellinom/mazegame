@@ -9,14 +9,18 @@ type turtle = {
     is facing. [color] is the color of the trail the turtle will leave as it
     moves.*)
 
-val to_rad : int -> int
+val make_turtle : int -> int -> int -> int -> turtle
+(** [make_turtle x y angle color] is a new turtle at position [x] and [y],
+    facing [angle] in [color]. *)
+
+val to_rad : int -> float
 (** [to_rad angle] is angle in radians. *)
 
-val forward : turtle -> int -> unit
+val forward : turtle -> float -> unit
 (** [forward turtle l] draws a line with length [l] in the direction of
     [turtle.angle] *)
 
-val backward : turtle -> int -> unit
+val backward : turtle -> float -> unit
 (** [backward turtle l] draws a line with length [l] in the opposite direction
     of [turtle.angle] *)
 
