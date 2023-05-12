@@ -98,7 +98,6 @@ let generate_images (m : t) (desired_image_count : int) : t =
         (fun col_i entry ->
           match entry with
           | Free when row_i != 0 && col_i != 0 ->
-              print_endline (string_of_int row_i ^ string_of_int col_i);
               free_locations := LocationSet.add (row_i, col_i) !free_locations
           | _ -> ())
         row)
