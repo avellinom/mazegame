@@ -66,8 +66,13 @@ let move_user (c : t) (move : move) : t =
       match location_is_free mz_array (x', y') with
       | true ->
           mz_array.(x).(y) <- Free;
+          let new_image_list =
+            match mz_array.(x').(y') with
+            | Picture image -> image :: c.image_collection
+            | _ -> c.image_collection
+          in
           mz_array.(x').(y') <- Person user;
-          { c with user_location = (x', y') }
+          { c with user_location = (x', y'); image_collection = new_image_list }
       | false -> raise InvalidMove)
 
 let check_solved (c : t) : t =
