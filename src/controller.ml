@@ -4,6 +4,7 @@ type t = {
   mz_array : maze_array;
   user_location : Maze.location;
   user : User.t;
+  image_collection : Image.t list;
 }
 
 exception InvalidMove
@@ -33,7 +34,7 @@ let start_game (filename : string) (username : string) (num_images : int) : t =
   match location_is_free mz_array (0, 0) with
   | true ->
       mz_array.(0).(0) <- Person usr;
-      { mz_array; user_location = (0, 0); user = usr }
+      { mz_array; user_location = (0, 0); user = usr; image_collection = [] }
   | false -> failwith "Error creating maze."
 
 (** [move] represents the directions in which a user can make a move by one maze
@@ -56,7 +57,7 @@ let move_user (c : t) (move : move) : t =
     | Down -> (1, 0)
   in
   match c with
-  | { mz_array; user_location; user } -> (
+  | { mz_array; user_location; user; image_collection } -> (
       let x, y = user_location in
       let x', y' =
         match (x, y) with
@@ -71,7 +72,7 @@ let move_user (c : t) (move : move) : t =
 
 let check_solved (c : t) : t =
   match c with
-  | { mz_array; user_location; user } ->
+  | { mz_array; user_location; user; image_collection } ->
       let bottom_right_index =
         (Maze.get_num_rows mz_array - 1, Maze.get_num_cols mz_array - 1)
       in
@@ -84,7 +85,7 @@ let move_down (c : t) : t = check_solved (move_user c Down)
 
 let string_of_game (c : t) : string =
   match c with
-  | { mz_array; user_location; user } ->
+  | { mz_array; user_location; user; image_collection } ->
       let buffer = Buffer.create 16 in
       Array.iter
         (fun row ->
@@ -99,6 +100,10 @@ let string_of_game (c : t) : string =
 
 let print_game (c : t) (color_style : ANSITerminal.style) : unit =
   match c with
-  | { mz_array; user_location; user } ->
+  | { mz_array; user_location; user; image_collection } ->
       let board_string = string_of_game c in
       ANSITerminal.print_string [ color_style ] ("\n" ^ board_string)
+
+let get_all_collected_images (c : t) : Image.t list =
+  match c with
+  | { mz_array; user_location; user; image_collection } -> image_collection
