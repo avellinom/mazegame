@@ -86,6 +86,16 @@ let controller_tests =
         |> move_left);
     invalid_move_game_test "User cannot move into wall on their right"
       (fun () -> make_game Empty 0 |> move_down |> move_right |> move_right);
+    invalid_move_game_test "User cannot move off board by moving left"
+      (fun () -> make_game Large 0 |> move_left);
+    invalid_move_game_test "User cannot move off board by moving up" (fun () ->
+        make_game Large 0 |> move_up);
+    invalid_move_game_test "User cannot move off board by moving down"
+      (fun () -> make_game Large 0 |> move_down |> move_down |> move_down);
+    invalid_move_game_test "User cannot move off board by moving right"
+      (fun () ->
+        make_game Large 0 |> move_right |> move_right |> move_right
+        |> move_right |> move_right);
   ]
 
 let tests = "test suite for MS2" >::: List.flatten [ controller_tests ]
