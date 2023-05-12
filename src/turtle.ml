@@ -8,7 +8,7 @@ type turtle = {
 }
 
 let make_turtle x y angle color = { x; y; angle; color }
-let to_rad angle = Float.pi *. 180. *. float_of_int angle
+let to_rad angle = Float.pi /. 180. *. float_of_int angle
 
 (** [move_turtle turtle l] moves the [turtle] by length [l] in the angle of
     [turtle.angle] while leaving a trail in [turtle.color]. *)
