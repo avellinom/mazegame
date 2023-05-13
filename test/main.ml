@@ -274,5 +274,5 @@ let controller_tests =
         get_close_to_large_maze_exit 25 |> move_down);
   ]
 
-let tests = "test suite for MS2" >::: List.flatten [ controller_tests ]
+let tests = "Maze Game tests" >::: List.flatten [ controller_tests ]
 let _ = run_test_tt_main tests
