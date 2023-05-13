@@ -50,7 +50,7 @@ let solved_game_test (name : string)
     (solved_move_sequence : unit -> Controller.t) : test =
   name >:: fun _ -> assert_raises MazeSolved solved_move_sequence
 
-(* This sequence puts the player one above the goal on the large maze. *)
+(* This sequence puts the player one above the goal on the small maze. *)
 let get_close_to_small_maze_exit (image_amount : int) : Controller.t =
   make_game Small image_amount
   |> move_down |> move_right |> move_right |> move_right |> move_right
