@@ -28,4 +28,4 @@ val left : turtle -> int -> unit
 (** [left turtle angle] turns the turtle to the left by [angle] degrees. *)
 
 val right : turtle -> int -> unit
-(** [right turtle anagle] turns the turtle to the right by [angle] degrees. *)
+(** [right turtle angle] turns the turtle to the right by [angle] degrees. *)
