@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LIB="Controller"
+LIB="Lib"
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
   # macOS

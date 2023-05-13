@@ -1,6 +1,7 @@
 open Graphics
 open Lib
 open Tree
+open Snowflake
 
 (** This executable provides an area to test out image generation. *)
 
@@ -11,4 +12,11 @@ let make_tree () =
   ignore (wait_next_event [ Button_down ]);
   close_graph ()
 
-let () = make_tree ()
+let make_snowflake () =
+  open_graph " 480x570";
+  let turtle = init_snowflake 250 50 90 black in
+  draw_snowflake turtle 6 6 100.;
+  ignore (wait_next_event [ Button_down ]);
+  close_graph ()
+
+let () = make_snowflake ()
