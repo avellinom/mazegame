@@ -28,6 +28,6 @@ clean:
 doc:
 	dune build @doc
 
-opendoc:
+opendoc: doc
 	@bash opendoc.sh
 
