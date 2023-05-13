@@ -251,7 +251,7 @@ let controller_tests =
     invalid_move_game_test
       "User cannot move off the board by moving left on large maze" (fun () ->
         make_game Large 0 |> move_down |> move_left);
-    (* Solvability *)
+    (* Solvability without images *)
     solved_game_test "User can solve empty maze by tracing top and right edges"
       (fun () ->
         make_game Empty 0 |> move_right |> move_right |> move_right
