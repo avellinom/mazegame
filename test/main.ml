@@ -457,8 +457,20 @@ let cryptography_tests =
       (Crypt.generate_determined_affine_key 6 2);
     test_affine_encrypt_bad_key
       "In key=(a,b), gcd(a, 26) != 1 raises when a is large" lowercase_alphabet
-      (Crypt.generate_determined_affine_key 364 6)
-    (* Affine encryption works on lowercase strings with spaces *);
+      (Crypt.generate_determined_affine_key 364 6);
+    (* Affine encryption works on lowercase strings with spaces *)
+    test_affine_encrypt "Typical small a and b on plaintext with spaces I"
+      "the dog walked to the park"
+      (Crypt.generate_determined_affine_key 7 4)
+      "hbg zyu cedwgz hy hbg fetw";
+    test_affine_encrypt
+      "Typical small a and b on plaintext with spaces and all possible \
+       lowercase letters"
+      "the pyramid of giza is the oldest and last remaining of the original \
+       seven world wonders also the quick brown fox jumps over the lazy dog"
+      (Crypt.generate_determined_affine_key 3 22)
+      "bri pqvwguf ml outw uy bri mdfiyb wjf dwyb vigwujujo ml bri mvuoujwd \
+       yihij kmvdf kmjfivy wdym bri seuca zvmkj lmn xegpy mhiv bri dwtq fmo";
   ]
 
 let tests =
