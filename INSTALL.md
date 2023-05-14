@@ -1,11 +1,10 @@
-# Install Guide
-Run the following commands in terminal to install/use the maze generator:
+## Installation
 
-1. Run the code:
+* Enter the following commands:
+    * `opam install ANSITerminal`
+    * `opam install graphics`
+    *  ^ more related to graphics go here
 
-    `$ make run`
+## Build and Run
 
-
-Notes for when we remake this
-    - Graphics library for images
-    - ANSII library for pretty printing
+* Enter `make play`
