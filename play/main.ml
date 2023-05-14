@@ -234,10 +234,7 @@ and perform_instruction (input : instruction) : unit =
             ("tomb.mz", 5)
       in
       let filepath = data_dir_prefix ^ maze_typ in
-      let game_ctrl =
-        Controller.start_game filepath
-          image_count (* TODO: CHANGE THESE INPUTS *)
-      in
+      let game_ctrl = Controller.start_game filepath image_count in
       print_string [ console_subcolor ]
         "Here is the maze. Note that you are 'p' and start in the top left \
          corner.\n\
