@@ -2,10 +2,10 @@ type t
 (** [t] is the abstract type representing a controller for a Maze Game. This is
     where the user provides instructions to the Maze Game. *)
 
-val start_game : string -> string -> int -> t
-(** [start_game f s n] starts a game by generating a maze from file f and
-    creating a user of name s. The game will have n images in its maze. Raises:
-    [Failure] if f is not a valid maze file. *)
+val start_game : string -> int -> t
+(** [start_game f n] starts a game by generating a maze from file [f]. The game
+    will have n images in its maze. Raises: [Failure] if f is not a valid maze
+    file. *)
 
 val print_game : t -> ANSITerminal.style -> unit
 (** [print_game c] prints the state of the game to the command line. *)

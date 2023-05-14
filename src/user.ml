@@ -1,3 +1,3 @@
-type t = string
+type t = unit
 
-let make (name : string) : t = name
+let make () : t = ()

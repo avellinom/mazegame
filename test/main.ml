@@ -25,7 +25,6 @@ type maze_type =
 
 (** [make_game t n] makes a Maze Game from a maze type t with n images. *)
 let make_game (typ : maze_type) (image_count : int) : Controller.t =
-  let username = "test user" in
   let maze_filepath =
     match typ with
     | Tourist -> tourist_fileroute
@@ -33,7 +32,7 @@ let make_game (typ : maze_type) (image_count : int) : Controller.t =
     | Sphinx -> sphinx_fileroute
     | Tomb -> tomb_fileroute
   in
-  let ctrl = Controller.start_game maze_filepath username image_count in
+  let ctrl = Controller.start_game maze_filepath image_count in
   ctrl
 
 (** [game_test n c ps] prints out the maze state of controller c if ps, and

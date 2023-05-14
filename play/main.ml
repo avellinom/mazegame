@@ -266,7 +266,7 @@ and perform_instruction (input : instruction) : unit =
       in
       let filepath = data_dir_prefix ^ maze_typ in
       let game_ctrl =
-        Controller.start_game filepath "todo: some user name"
+        Controller.start_game filepath
           image_count (* TODO: CHANGE THESE INPUTS *)
       in
       print_string [ console_subcolor ]

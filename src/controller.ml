@@ -26,11 +26,11 @@ let location_is_free (mz_array : maze_array) (loc : Maze.location) : bool =
     end
   | _ -> false
 
-let start_game (filename : string) (username : string) (num_images : int) : t =
+let start_game (filename : string) (num_images : int) : t =
   let mz = Maze.make filename in
   let mz' = Maze.generate_images mz num_images in
   let mz_array = Maze.array_of_maze mz' in
-  let usr = User.make username in
+  let usr = User.make () in
   match location_is_free mz_array (0, 0) with
   | true ->
       mz_array.(0).(0) <- Person usr;
