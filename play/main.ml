@@ -5,6 +5,9 @@ open ANSITerminal
 (** The common prefix for reading from files. *)
 let data_dir_prefix : string = "data" ^ Filename.dir_sep
 
+let data_ascii_art_prefix : string =
+  "data" ^ Filename.dir_sep ^ "ascii-art" ^ Filename.dir_sep
+
 (** Supported types for the maze. *)
 type maze_typ =
   | Tourist
@@ -26,76 +29,30 @@ let console_subcolor : style = magenta
 (* The color that the maze is displayed in. *)
 let maze_displaycolor : style = magenta
 
+(* [string_of_file f] converts the contents of filename f into a string.
+   Citation:
+   https://stackoverflow.com/questions/53839695/how-do-i-read-the-entire-content-of-a-given-file-into-a-string*)
+let string_of_file (filename : string) : string =
+  let ch = open_in_bin filename in
+  let s = really_input_string ch (in_channel_length ch) in
+  close_in ch;
+  s
+
 (* The camel that is displayed at the start of the program. *)
 let camel_art : string =
-  {|
-                                                        =--_
-                                         .-""""""-.     |* _)
-                                        /          \   /  /
-                                       /            \_/  /
-           _                          /|                /
-       _-'"/\                        / |    ____    _.-"            _
-    _-'   (  '-_            _       (   \  |\  /\  ||           .-'".".
-_.-'       '.   `'-._   .-'"/'.      "   | |/ /  | |/        _-"   (   '-_
-             '.      _-"   (   '-_       \ | /   \ |     _.-'       )     "-._
-           _.'   _.-'       )     "-._    ||\\   |\\  '"'        .-'
-         '               .-'          `'  || \\  ||))
-jjs__  _  ___  _ ____________ _____  ___ _|\ _|\_|\\/ _______________  ___   _
-                       c  c  " c C ""C  " ""  "" ""
-                   c       C
-              C        C
-                   C
-    C     c
-  |}
+  string_of_file (data_ascii_art_prefix ^ "intro-camel.txt")
 
 (* The lone pyramid that is displayed at the beginning of the tourist level. *)
 let lone_pyramid_art : string =
-  {|
-  /\
-  ___                  /  \                  ___
- /   \     __         /    \         __     /
-/     \   /  \   _   / <()> \   _   /  \   /
-       \_/    \_/ \_/________\_/ \_/    \_/
- __________________/__I___I___\________________
-                  /_I___I___I__\
-                 /I___I___I___I_\
-                /___I___I___I___I\
-               /__I___I___I___I___\
-              /_I___I___I___I___I__\
-             /I___I___I___I___I___I_\
-            /___I___I___I___I___I___I\
-           /__I___I___I___I___I___I___\
-          /_I___I___I___I___I___I___I__\
-  |}
+  string_of_file (data_ascii_art_prefix ^ "tourist-pyramid.txt")
 
 (* The sphinx that is displayed at the beginning of the sphinx level. *)
 let sphinx_art : string =
-  {|
-                _-_
-             /'. .'\   /\.
-        /\. /(|`/ !)\ /:_\/.
-       /:_\|  \ = /  |__:_\/ .
-            `  ---  .__:___\/./
-           /---------\___:__\/
-          /-----------\
-     ____/----   -/    \__
-    / / / / |     | \ \ \ \
-  |}
+  string_of_file (data_ascii_art_prefix ^ "sphinx-cat.txt")
 
 (* The tomb that is displayed at the beginning of the tomb level. *)
 let pharaoh_art : string =
-  {|
-          _....._
-         .\:\:/:/.
-        /=\_.@._/=\
-       /==/ _ _ \==\
-      /==(   -   )==\
-      |===\  =  /===|
-      \====|-V-|====/
-       \===|   |===/
-        |==|   |==|
-        '=.|   |.='
-  |}
+  string_of_file (data_ascii_art_prefix ^ "tomb-pharaoh.txt")
 
 (** [begin_console ()] begins the console. It displays the initial instructions
     of the game to the user. *)
