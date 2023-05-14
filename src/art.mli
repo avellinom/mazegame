@@ -1,5 +1,30 @@
 open Turtle
 
+type color = int
+(** [color] is the representation of color. *)
+
+(** [color_scheme] is a representation of different colors. Int in each type
+    represents the gradient of the color, 1 being the lightest and 9 being the
+    darkest. Precondition: Int within the type must be between 1 and 9
+    inclusive. *)
+type color_scheme =
+  | Red of int
+  | Orange of int
+  | Yellow of int
+  | LightGreen of int
+  | Green of int
+  | BlueGreen of int
+  | Skyblue of int
+  | LightBlue of int
+  | Blue of int
+  | Purple of int
+  | Pink of int
+  | RedPink of int
+  | BlackWhite of int
+
+val palette : color_scheme -> color
+(** [palette c_scheme] is color representative of [c_scheme]. *)
+
 val draw_triangle : turtle -> int -> unit
 (** [draw_triangle turtle r] is a triangle that has an endpoint at radius [r]
     away from where [turtle] is facing. *)
