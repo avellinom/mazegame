@@ -1,6 +1,6 @@
 type affine_key = int * int
 
-(* All the available betas for an affine key (alpha,beta). *)
+(* All the available betas for an affine key (alpha, beta). *)
 let numbers_coprime_with_26 = [| 1; 3; 5; 7; 9; 11; 15; 17; 19; 21; 23; 25 |]
 
 exception BadKey
@@ -21,7 +21,9 @@ let char_to_int (c : char) : int = Char.code c - Char.code 'a'
     etc. *)
 let int_to_char (i : int) : char =
   let i = i mod 26 in
-  Char.chr (i + Char.code 'a')
+  let i' = if i < 0 then i + 26 else i in
+  (* shifting left (decrypting) can negate *)
+  Char.chr (i' + Char.code 'a')
 
 let affine_encrypt (plaintext : string) (key : affine_key) : string =
   let alpha, beta = key in
@@ -36,5 +38,39 @@ let affine_encrypt (plaintext : string) (key : affine_key) : string =
             (int_to_char ((alpha * char_to_int c) + beta)))
       plaintext;
     Buffer.contents ciphertext
+  end
+  else raise BadKey
+
+(** [invert a] finds the inverse of a modulo 26. If the inverse does not exist,
+    it returns None. Otherwise, it returns Some a^-1. *)
+let invert (a : int) : int option =
+  let rec extended_euclidean_algorithm (a : int) (b : int) : int * int * int =
+    if b = 0 then (a, 1, 0)
+    else
+      match extended_euclidean_algorithm b (a mod b) with
+      | d, a', b' -> (d, b', a' - (a / b * b'))
+  in
+  match extended_euclidean_algorithm a 26 with
+  | 1, a', _ -> if a' < 0 then Some (a' + 26) else Some a'
+  | _ -> None
+
+let affine_decrypt (ciphertext : string) (key : affine_key) : string =
+  let alpha, beta = key in
+  if Array.mem alpha numbers_coprime_with_26 then begin
+    let ciphertext = String.lowercase_ascii ciphertext in
+    let plaintext = Buffer.create 16 in
+    let alpha_inverse =
+      match invert alpha with
+      | Some a_inv -> a_inv
+      | None -> raise BadKey
+    in
+    String.iter
+      (fun c ->
+        if c = ' ' then Buffer.add_char plaintext c
+        else
+          Buffer.add_char plaintext
+            (int_to_char (alpha_inverse * (char_to_int c - beta))))
+      ciphertext;
+    Buffer.contents plaintext
   end
   else raise BadKey

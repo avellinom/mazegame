@@ -380,9 +380,26 @@ let test_affine_encrypt_bad_key (name : string) (plaintext : string)
   name >:: fun _ ->
   assert_raises Crypt.BadKey (fun () -> Crypt.affine_encrypt plaintext key)
 
+(** [test_affine_decrypt n c k p] creates a test named n. Decrypting c with k
+    should yield p. *)
+let test_affine_decrypt (name : string) (ciphertext : string)
+    (key : Crypt.affine_key) (expected_plaintext : string) : test =
+  name >:: fun _ ->
+  assert_equal expected_plaintext
+    (Crypt.affine_decrypt ciphertext key)
+    ~printer:Fun.id
+
+(** [test_affine_decrypt_bad_key n c k] creates a test named n. Decrypting c
+    with k should yield a BadKey exception. *)
+let test_affine_decrypt_bad_key (name : string) (ciphertext : string)
+    (key : Crypt.affine_key) : test =
+  name >:: fun _ ->
+  assert_raises Crypt.BadKey (fun () -> Crypt.affine_decrypt ciphertext key)
+
 let cryptography_tests =
   [
-    (* Specific instance (a=1) where Affine turns into a Caesar cipher *)
+    (* Specific instance (a=1) where Affine encrypt turns into a Caesar
+       encrypt *)
     test_affine_encrypt "Caesar equivalent, 1 shift right" lowercase_alphabet
       (Crypt.generate_determined_affine_key 1 1)
       "bcdefghijklmnopqrstuvwxyza";
@@ -396,7 +413,7 @@ let cryptography_tests =
       lowercase_alphabet
       (Crypt.generate_determined_affine_key 1 70)
       "stuvwxyzabcdefghijklmnopqr";
-    (* When a is small and b varies *)
+    (* Encrypt when a is small and b varies *)
     test_affine_encrypt "In key=(a,b), use small a and zero b"
       lowercase_alphabet
       (Crypt.generate_determined_affine_key 3 0)
@@ -413,7 +430,7 @@ let cryptography_tests =
       lowercase_alphabet
       (Crypt.generate_determined_affine_key 5 10000)
       "qvafkpuzejotydinsxchmrwbgl";
-    (* When a is moderate and b varies *)
+    (* Encrypt when a is moderate and b varies *)
     test_affine_encrypt "In key=(a,b), use moderate a and zero b"
       lowercase_alphabet
       (Crypt.generate_determined_affine_key 15 0)
@@ -430,7 +447,7 @@ let cryptography_tests =
       lowercase_alphabet
       (Crypt.generate_determined_affine_key 15 9876)
       "wlapetixmbqfujyncrgvkzodsh";
-    (* When a is large and b varies *)
+    (* Encrypt when a is large and b varies *)
     test_affine_encrypt "In key=(a,b), use large a and zero b"
       lowercase_alphabet
       (Crypt.generate_determined_affine_key 23 0)
@@ -471,6 +488,87 @@ let cryptography_tests =
       (Crypt.generate_determined_affine_key 3 22)
       "bri pqvwguf ml outw uy bri mdfiyb wjf dwyb vigwujujo ml bri mvuoujwd \
        yihij kmvdf kmjfivy wdym bri seuca zvmkj lmn xegpy mhiv bri dwtq fmo";
+    (* Specific instance (a=1) where Affine decrypt turns into Caesar decrypt *)
+    test_affine_decrypt "Caesar equivalent, 1 shifts left" lowercase_alphabet
+      (Crypt.generate_determined_affine_key 1 1)
+      "zabcdefghijklmnopqrstuvwxy";
+    test_affine_decrypt "Caesar equivalent, 10 shifts left" lowercase_alphabet
+      (Crypt.generate_determined_affine_key 1 10)
+      "qrstuvwxyzabcdefghijklmnop";
+    test_affine_decrypt "Caesar equivalent, 25 shifts left" lowercase_alphabet
+      (Crypt.generate_determined_affine_key 1 25)
+      "bcdefghijklmnopqrstuvwxyza";
+    test_affine_decrypt "Caesar equivalent, 10000 shifts left"
+      lowercase_alphabet
+      (Crypt.generate_determined_affine_key 1 10000)
+      "klmnopqrstuvwxyzabcdefghij";
+    (* Decrypt when a is small and b varies *)
+    test_affine_decrypt "Decrypt with small a and zero b" lowercase_alphabet
+      (Crypt.generate_determined_affine_key 3 0)
+      "ajsbktcludmvenwfoxgpyhqzir";
+    test_affine_decrypt "Decrypt with small a and small b" lowercase_alphabet
+      (Crypt.generate_determined_affine_key 3 3)
+      "zirajsbktcludmvenwfoxgpyhq";
+    test_affine_decrypt "Decrypt with small a and moderate b" lowercase_alphabet
+      (Crypt.generate_determined_affine_key 5 15)
+      "xsnidytojezupkfavqlgbwrmhc";
+    test_affine_decrypt "Decrypt with small a and large b" lowercase_alphabet
+      (Crypt.generate_determined_affine_key 5 24)
+      "qlgbwrmhcxsnidytojezupkfav";
+    test_affine_decrypt "Decrypt with small a and large b > 26"
+      lowercase_alphabet
+      (Crypt.generate_determined_affine_key 7 10001)
+      "fujyncrgvkzodshwlapetixmbq";
+    (* Decrypt when a is moderate and b varies *)
+    test_affine_decrypt "Decrypt with moderate a and zero b" lowercase_alphabet
+      (Crypt.generate_determined_affine_key 11 0)
+      "atmfyrkdwpibungzslexqjcvoh";
+    test_affine_decrypt "Decrypt with moderate a and small b" lowercase_alphabet
+      (Crypt.generate_determined_affine_key 15 4)
+      "yfmtahovcjqxelszgnubipwdkr";
+    test_affine_decrypt "Decrypt with moderate a and large b" lowercase_alphabet
+      (Crypt.generate_determined_affine_key 17 23)
+      "rolifczwtqnkhebyvspmjgdaxu";
+    test_affine_decrypt "Decrypt with moderate a and large b > 26"
+      lowercase_alphabet
+      (Crypt.generate_determined_affine_key 17 98703)
+      "vspmjgdaxurolifczwtqnkheby";
+    (* Decrypt when a is large and b varies *)
+    test_affine_decrypt "Decrypt with large a and zero b" lowercase_alphabet
+      (Crypt.generate_determined_affine_key 25 0)
+      "azyxwvutsrqponmlkjihgfedcb";
+    test_affine_decrypt "Decrypt with large a and small b" lowercase_alphabet
+      (Crypt.generate_determined_affine_key 23 4)
+      "kbsjarizqhypgxofwnevmdulct";
+    test_affine_decrypt "Decrypt with large a and moderate b" lowercase_alphabet
+      (Crypt.generate_determined_affine_key 21 15)
+      "dinsxchmrwbglqvafkpuzejoty";
+    test_affine_decrypt "Decrypt with large a and large b" lowercase_alphabet
+      (Crypt.generate_determined_affine_key 25 25)
+      "zyxwvutsrqponmlkjihgfedcba";
+    test_affine_decrypt "Decrypt with large a and large b > 26"
+      lowercase_alphabet
+      (Crypt.generate_determined_affine_key 25 964301)
+      "nmlkjihgfedcbazyxwvutsrqpo";
+    (* Affine decryption raises BadKey when applicable *)
+    test_affine_decrypt_bad_key
+      "In key=(a,b), gcd(a,26) != 1 raises when a is small" lowercase_alphabet
+      (Crypt.generate_determined_affine_key 8 1);
+    test_affine_decrypt_bad_key
+      "In key=(a,b), gcd(a,26) != 1 raises when a is large" lowercase_alphabet
+      (Crypt.generate_determined_affine_key 42 17);
+    (* Decrypt with spaces *)
+    test_affine_decrypt "Decryption works with spaces" "   a"
+      (Crypt.generate_determined_affine_key 3 5)
+      "   h";
+    (* Decryption is the inverse of encryption *)
+    ( "Decryption is the inverse of encryption: with spaces and all characters"
+    >:: fun _ ->
+      let plaintext = "the quick brown fox jumps over the lazy dog in egypt" in
+      let key = Crypt.generate_determined_affine_key 5 90 in
+      assert_equal plaintext
+        (let ciphertext = Crypt.affine_encrypt plaintext key in
+         Crypt.affine_decrypt ciphertext key) );
   ]
 
 let tests =
