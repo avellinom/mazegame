@@ -40,16 +40,16 @@ let sqruare_endpts turtle r =
 
 (** [diamond_endpts turtle w h] is an array containing endpoints of a diamond.
     Refer to [draw_diamond] spec for what diamond it describes. *)
-let diamond_endpts turtle w h =
-  let w' = float_of_int w in
+let diamond_endpts turtle h =
+  let w = float_of_int h /. 2. in
   let h' = float_of_int h in
   let endpoint1 = find_endpoint turtle h' in
   left turtle 90;
-  let endpoint2 = find_endpoint turtle w' in
+  let endpoint2 = find_endpoint turtle w in
   left turtle 90;
   let endpoint3 = find_endpoint turtle h' in
   left turtle 90;
-  let endpoint4 = find_endpoint turtle w' in
+  let endpoint4 = find_endpoint turtle w in
   left turtle 90;
   [| endpoint1; endpoint2; endpoint3; endpoint4 |]
 
@@ -77,8 +77,8 @@ let draw_square turtle r =
   let arr = sqruare_endpts turtle r in
   draw_poly arr
 
-let draw_diamond turtle w h =
-  let arr = diamond_endpts turtle w h in
+let draw_diamond turtle h =
+  let arr = diamond_endpts turtle h in
   draw_poly arr
 
 let draw_pentagon turtle r =
@@ -104,9 +104,9 @@ let color_square turtle r c =
   fill_poly arr;
   set_color turtle.color
 
-let color_diamond turtle w h c =
+let color_diamond turtle h c =
   set_color c;
-  let arr = diamond_endpts turtle w h in
+  let arr = diamond_endpts turtle h in
   fill_poly arr;
   set_color turtle.color
 
@@ -140,25 +140,18 @@ let rec draw_snowflake turtle acc sides length depth =
     right turtle (360 / sides);
     draw_snowflake turtle (acc - 1) sides length depth)
 
-let draw_snowflake_centered turtle acc sides length depth =
-  draw_snowflake turtle acc sides length depth
-
 type seed = Turtle.turtle
 
 let init_tree x y angle color = make_turtle x y angle color
 
-let rec draw_tree seed depth length angle =
-  if depth = 0 then (
-    set_color green;
-    fill_ellipse (current_x ()) (current_y ())
-      (int_of_float (length /. 3.))
-      (int_of_float (length /. 2.)))
+let rec draw_tree seed f depth length angle =
+  if depth = 0 then f
   else (
     forward seed length;
     left seed angle;
-    draw_tree seed (depth - 1) (length *. 0.8) angle;
+    draw_tree seed f (depth - 1) (length *. 0.8) angle;
     right seed (angle * 2);
-    draw_tree seed (depth - 1) (length *. 0.8) angle;
+    draw_tree seed f (depth - 1) (length *. 0.8) angle;
     left seed angle;
     backward seed length)
 
@@ -324,10 +317,17 @@ let palette = function
       failwith "BlackWhite color scheme int must be between 1 and 9 inclusive."
 
 type pat =
+  | NA
   | Circle of int * color_scheme
   | Triangle of int * color_scheme
   | Square of int * color_scheme
-  | Diamond of int * int * color_scheme
+  | Diamond of int * color_scheme
   | Pentagon of int * color_scheme
-  | Tree
-  | Snowflake
+  | Tree of pat * int * float * int * color_scheme
+  | Snowflake of int * float * int * color_scheme
+
+(* let draw_pat turtle = function | NA -> () | Circle (r, c_scheme) -> |
+   Triangle (r, c_scheme) -> | Square (r, c_scheme) -> | Diamond (h, c_scheme)
+   -> | Pentagon (r, c_scheme) -> *)
+(* | Tree of patt * int * float * int * color_scheme | Snowflake of int * float
+   * int * color_scheme *)
