@@ -4,7 +4,6 @@ type t = {
   mz_array : maze_array;
   user_location : Maze.location;
   user : User.t;
-  image_collection : Image.t list;
 }
 
 exception InvalidMove
@@ -34,7 +33,7 @@ let start_game (filename : string) (num_images : int) : t =
   match location_is_free mz_array (0, 0) with
   | true ->
       mz_array.(0).(0) <- Person usr;
-      { mz_array; user_location = (0, 0); user = usr; image_collection = [] }
+      { mz_array; user_location = (0, 0); user = usr }
   | false -> failwith "Error creating maze."
 
 (** [move] represents the directions in which a user can make a move by one maze
@@ -57,7 +56,7 @@ let move_user (c : t) (move : move) : t =
     | Down -> (1, 0)
   in
   match c with
-  | { mz_array; user_location; user; image_collection } -> (
+  | { mz_array; user_location; user } -> (
       let x, y = user_location in
       let x', y' =
         match (x, y) with
@@ -66,18 +65,13 @@ let move_user (c : t) (move : move) : t =
       match location_is_free mz_array (x', y') with
       | true ->
           mz_array.(x).(y) <- Free;
-          let new_image_list =
-            match mz_array.(x').(y') with
-            | Picture image -> image :: c.image_collection
-            | _ -> c.image_collection
-          in
           mz_array.(x').(y') <- Person user;
-          { c with user_location = (x', y'); image_collection = new_image_list }
+          { c with user_location = (x', y') }
       | false -> raise InvalidMove)
 
 let check_solved (c : t) : t =
   match c with
-  | { mz_array; user_location; user; image_collection } ->
+  | { mz_array; user_location; user } ->
       let bottom_right_index =
         (Maze.get_num_rows mz_array - 1, Maze.get_num_cols mz_array - 1)
       in
@@ -90,7 +84,7 @@ let move_down (c : t) : t = check_solved (move_user c Down)
 
 let string_of_game (c : t) : string =
   match c with
-  | { mz_array; user_location; user; image_collection } ->
+  | { mz_array; user_location; user } ->
       let buffer = Buffer.create 16 in
       Array.iter
         (fun row ->
@@ -105,10 +99,6 @@ let string_of_game (c : t) : string =
 
 let print_game (c : t) (color_style : ANSITerminal.style) : unit =
   match c with
-  | { mz_array; user_location; user; image_collection } ->
+  | { mz_array; user_location; user } ->
       let board_string = string_of_game c in
       ANSITerminal.print_string [ color_style ] ("\n" ^ board_string)
-
-let get_all_collected_images (c : t) : Image.t list =
-  match c with
-  | { mz_array; user_location; user; image_collection } -> image_collection

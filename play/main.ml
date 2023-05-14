@@ -177,12 +177,6 @@ let rec perform_movement (game_ctrl : Controller.t) (dir : direction) : unit =
   | MazeSolved ->
       print_string [ console_color ]
         "Congratulations! You traversed the maze.\n";
-      let images_found = Controller.get_all_collected_images game_ctrl in
-      List.iteri
-        (fun index element ->
-          print_endline ("some image " ^ string_of_int index))
-        images_found;
-      (* TODO: update this to reveal images*)
       print_string [ console_color ] "Welcome back to the console.\n";
       print_string [ console_subcolor ]
         "\n\

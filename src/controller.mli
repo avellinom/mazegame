@@ -40,7 +40,3 @@ val move_down : t -> t
 (** [move_down c] moves the user on the maze down once. Returns a controller,
     identical for c except for that movement. Raises: InvalidMove if the
     movement is not possible.*)
-
-val get_all_collected_images : t -> Image.t list
-(** [get_all_collected_images c] gets all the images that the user controlling
-    via c has collected throughout their maze traversal as a list*)
