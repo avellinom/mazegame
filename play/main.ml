@@ -5,16 +5,15 @@ open ANSITerminal
 (** The common prefix for reading from files. *)
 let data_dir_prefix : string = "data" ^ Filename.dir_sep
 
-(** Supported types for the maze. *)
-type maze_typ =
-  | Tourist
-  | Pyramid
-  | Sphinx
-  | Tomb
+(** Supported sizes for the maze. *)
+type size =
+  | Small
+  | Large
+  | Empty
 
 (** The console accepts inputs of this form. *)
 type instruction =
-  | Play of maze_typ
+  | Play of size
   | Quit
 
 (** The dominant color of the console. *)
@@ -24,64 +23,22 @@ let console_color : ANSITerminal.style = red
 let console_subcolor : style = magenta
 
 (* The color that the maze is displayed in. *)
-let maze_displaycolor : style = magenta
-
-(* The camel that is displayed at the start of the program. *)
-let camel_art : string =
-  {|
-                                                        =--_
-                                         .-""""""-.     |* _)
-                                        /          \   /  /
-                                       /            \_/  /
-           _                          /|                /
-       _-'"/\                        / |    ____    _.-"            _
-    _-'   (  '-_            _       (   \  |\  /\  ||           .-'".".
-_.-'       '.   `'-._   .-'"/'.      "   | |/ /  | |/        _-"   (   '-_
-             '.      _-"   (   '-_       \ | /   \ |     _.-'       )     "-._
-           _.'   _.-'       )     "-._    ||\\   |\\  '"'        .-'
-         '               .-'          `'  || \\  ||))
-jjs__  _  ___  _ ____________ _____  ___ _|\ _|\_|\\/ _______________  ___   _
-                       c  c  " c C ""C  " ""  "" ""
-                   c       C
-              C        C
-                   C
-    C     c
-  |}
-
-(* The lone pyramid that is displayed at the beginning of the tourist level. *)
-let lone_pyramid_art : string =
-  {|
-  /\
-  ___                  /  \                  ___
- /   \     __         /    \         __     /
-/     \   /  \   _   / <()> \   _   /  \   /
-       \_/    \_/ \_/________\_/ \_/    \_/
- __________________/__I___I___\________________
-                  /_I___I___I__\
-                 /I___I___I___I_\
-                /___I___I___I___I\
-               /__I___I___I___I___\
-              /_I___I___I___I___I__\
-             /I___I___I___I___I___I_\
-            /___I___I___I___I___I___I\
-           /__I___I___I___I___I___I___\
-          /_I___I___I___I___I___I___I__\
-  |}
+let maze_displaycolor : style = blue
 
 (** [begin_console ()] begins the console. It displays the initial instructions
     of the game to the user. *)
 let begin_console () : unit =
-  print_string [ console_color ] "\n\t\t\t -- Welcome to Egypt! -- \n";
-  print_string [ console_color ] camel_art;
-  print_string [ console_subcolor ] "\nHere's how everything works: \n";
+  print_string [ console_color ] "\n -- Welcome to the Maze Game! -- \n";
+  print_string [ console_subcolor ] "Here's how everything works: \n";
   print_string [ console_subcolor ]
-    "  1. This is the Maze Game console. From here, you'll be able to select a \
-     maze or quit this console. \n";
+    "  1. This is the Maze Game console. From here, you'll be able to start a \
+     game or quit this console. \n";
   print_string [ console_subcolor ]
-    "  2. When beginning a game, you are able to select a maze type {tourist, \
-     pyramid, sphinx, tomb}. They are ordered at increasing levels of \
-     difficulty.\n\
-    \ It is recommended that you play them in order of increasing difficulty.\n";
+    "  2. When beginning a game, you are able to select a maze size {small, \
+     large}.\n";
+  print_string [ console_subcolor ]
+    "  3. During the game, you may find images. These treasures are randomly \
+     generated and they will be displayed to you on completion of the maze.\n";
   print_string [ console_color ] "\n -- Let's begin! -- \n"
 
 (** [stop_console_msg ()] displays a message to the user saying that the console
@@ -99,7 +56,7 @@ let bad_request_msg () : unit =
     mistakes. *)
 let rec process_raw_selection () : instruction =
   print_string [ console_subcolor ]
-    "Please make a selection {play <type>, quit}:\n";
+    "Please make a selection {play <size>, quit}:\n";
   print_string [ console_subcolor ] "> ";
   match read_line () with
   | exception End_of_file ->
@@ -109,18 +66,17 @@ let rec process_raw_selection () : instruction =
       let split_s = String.split_on_char ' ' s in
       let s_lst_no_spaces = List.filter (fun e -> String.empty <> e) split_s in
       match s_lst_no_spaces with
-      | "play" :: typ -> begin
-          match typ with
-          | [ typ ] -> begin
-              match typ with
-              | "tourist" -> Play Tourist
-              | "pyramid" -> Play Pyramid
-              | "sphinx" -> Play Sphinx
-              | "tomb" -> Play Tomb
+      | "play" :: size -> begin
+          match size with
+          | [ value ] -> begin
+              match value with
+              | "small" -> Play Small
+              | "large" -> Play Large
+              | "empty" -> Play Empty
               | _ ->
                   print_string [ console_subcolor ]
-                    "That maze type is not available. Available types are \
-                     {tourist, pyramid, sphinx, tomb}. ";
+                    "That maze size is not available. Available sizes are \
+                     {small, large}. ";
                   process_raw_selection ()
             end
           | _ ->
@@ -200,24 +156,17 @@ let rec perform_movement (game_ctrl : Controller.t) (dir : direction) : unit =
 and perform_instruction (input : instruction) : unit =
   print_string [ console_color ] "Instruction received.\n";
   match input with
-  | Play typ ->
-      let maze_typ, image_count =
-        match typ with
-        | Tourist ->
-            print_string [ console_color ] "\n\t\t\t -- TOURIST -- \n";
-            print_string [ console_color ] lone_pyramid_art;
-            print_string [ console_color ]
-              "A tourist I see... Let's see if you can dance around the \
-               pyramid Giza.\n";
-            ("tourist.mz", 0)
-        | Pyramid -> ("pyramid.mz", 0)
-        | Sphinx -> ("sphinx.mz", 0)
-        | Tomb -> ("tomb.mz", 0)
+  | Play sz ->
+      let maze_size =
+        match sz with
+        | Small -> "small.mz"
+        | Large -> "large.mz"
+        | Empty -> "empty.mz"
       in
-      let filepath = data_dir_prefix ^ maze_typ in
+      let filepath = data_dir_prefix ^ maze_size in
       let game_ctrl =
         Controller.start_game filepath "todo: some user name"
-          image_count (* TODO: CHANGE THESE INPUTS *)
+          1000 (* TODO: CHANGE THESE INPUTS *)
       in
       print_string [ console_subcolor ]
         "Here is the maze. Note that you are 'p' and start in the top left \
