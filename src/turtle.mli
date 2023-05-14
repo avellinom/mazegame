@@ -37,3 +37,9 @@ val left : turtle -> int -> unit
 
 val right : turtle -> int -> unit
 (** [right turtle angle] turns the turtle to the right by [angle] degrees. *)
+
+val sidestep_left : turtle -> float -> unit
+(** [sidestep_left turtle l] makes turtle sidestep to the left by length [l]. *)
+
+val teleport : turtle -> int -> int -> unit
+(** [teleport turtle x y] teleports turtle to the coordinate [x], [y]. *)
