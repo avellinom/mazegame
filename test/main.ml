@@ -372,6 +372,14 @@ let test_affine_encrypt (name : string) (plaintext : string)
     (Crypt.affine_encrypt plaintext key)
     ~printer:Fun.id
 
+(** [test_affine_encrypt_bad_key n p k] creates a test named n. Encrypting p
+    with k should yield a BadKey exception. In other words, key k does not
+    satisfy the precondition for Affine cryptography. *)
+let test_affine_encrypt_bad_key (name : string) (plaintext : string)
+    (key : Crypt.affine_key) : test =
+  name >:: fun _ ->
+  assert_raises Crypt.BadKey (fun () -> Crypt.affine_encrypt plaintext key)
+
 let cryptography_tests =
   [
     (* Specific instance (a=1) where Affine turns into a Caesar cipher *)
@@ -388,6 +396,7 @@ let cryptography_tests =
       lowercase_alphabet
       (Crypt.generate_determined_affine_key 1 70)
       "stuvwxyzabcdefghijklmnopqr";
+    (* When a is small and b varies *)
     test_affine_encrypt "In key=(a,b), use small a and zero b"
       lowercase_alphabet
       (Crypt.generate_determined_affine_key 3 0)
@@ -400,6 +409,56 @@ let cryptography_tests =
       lowercase_alphabet
       (Crypt.generate_determined_affine_key 3 24)
       "ybehknqtwzcfiloruxadgjmpsv";
+    test_affine_encrypt "In key=(a,b), use small a and large b > 26"
+      lowercase_alphabet
+      (Crypt.generate_determined_affine_key 5 10000)
+      "qvafkpuzejotydinsxchmrwbgl";
+    (* When a is moderate and b varies *)
+    test_affine_encrypt "In key=(a,b), use moderate a and zero b"
+      lowercase_alphabet
+      (Crypt.generate_determined_affine_key 15 0)
+      "apetixmbqfujyncrgvkzodshwl";
+    test_affine_encrypt "In key=(a,b), use moderate a and small b"
+      lowercase_alphabet
+      (Crypt.generate_determined_affine_key 17 2)
+      "ctkbsjarizqhypgxofwnevmdul";
+    test_affine_encrypt "In key=(a,b), use moderate a and large b"
+      lowercase_alphabet
+      (Crypt.generate_determined_affine_key 15 25)
+      "zodshwlapetixmbqfujyncrgvk";
+    test_affine_encrypt "In key=(a,b), use moderate a and large b > 26"
+      lowercase_alphabet
+      (Crypt.generate_determined_affine_key 15 9876)
+      "wlapetixmbqfujyncrgvkzodsh";
+    (* When a is large and b varies *)
+    test_affine_encrypt "In key=(a,b), use large a and zero b"
+      lowercase_alphabet
+      (Crypt.generate_determined_affine_key 23 0)
+      "axurolifczwtqnkhebyvspmjgd";
+    test_affine_encrypt "In key=(a,b), use large a and small b"
+      lowercase_alphabet
+      (Crypt.generate_determined_affine_key 23 4)
+      "ebyvspmjgdaxurolifczwtqnkh";
+    test_affine_encrypt "In key=(a,b), use large a and moderate b"
+      lowercase_alphabet
+      (Crypt.generate_determined_affine_key 25 13)
+      "nmlkjihgfedcbazyxwvutsrqpo";
+    test_affine_encrypt "In key=(a,b), use large a and large b"
+      lowercase_alphabet
+      (Crypt.generate_determined_affine_key 25 24)
+      "yxwvutsrqponmlkjihgfedcbaz";
+    test_affine_encrypt "In key=(a,b), use large a and large b > 26"
+      lowercase_alphabet
+      (Crypt.generate_determined_affine_key 21 456788)
+      "upkfavqlgbwrmhcxsnidytojez";
+    (* Affine encryption raises BadKey where applicable *)
+    test_affine_encrypt_bad_key
+      "In key=(a,b), gcd(a,26) != 1 raises when a is small" lowercase_alphabet
+      (Crypt.generate_determined_affine_key 6 2);
+    test_affine_encrypt_bad_key
+      "In key=(a,b), gcd(a, 26) != 1 raises when a is large" lowercase_alphabet
+      (Crypt.generate_determined_affine_key 364 6)
+    (* Affine encryption works on lowercase strings with spaces *);
   ]
 
 let tests =
