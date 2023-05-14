@@ -34,6 +34,11 @@ val draw_square : turtle -> int -> unit
     [turtle] is facing. Going radius [r] from where [turtle] is facing will be
     the middle of one side of the square. *)
 
+val draw_diamond : turtle -> int -> int -> unit
+(** [draw_diamond turtle w h] is a diamond that has an endpoint at height [h]
+    away from where [turtle] is facing. The diamond has width [w] and height
+    [h]. *)
+
 val draw_circle : turtle -> int -> unit
 (** [draw_circle turtle r] is a circle with radius [r] at the location of
     [turtle]. *)
@@ -50,6 +55,11 @@ val color_square : turtle -> int -> int -> unit
 (** [color_square turtle r c] is a square of color [c]. The square is determined
     by where the [turtle] is facing. Going radius [r] from where [turtle] is
     facing will be the middle of one side of the square. *)
+
+val color_diamond : turtle -> int -> int -> color -> unit
+(** [color_diamond turtle w h c] is a diamond of color [c] that has an endpoint
+    at height [h] away from where [turtle] is facing. The diamond has width [w]
+    and height [h]. *)
 
 val color_pentagon : turtle -> int -> int -> unit
 (** [color_pentagon turtle r c] is a pentagon of color [c] that has an endpoint

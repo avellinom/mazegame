@@ -1,3 +1,5 @@
+(** This module [Turtle.mli] is my OCaml version of python's Turtle module. *)
+
 type color = int
 
 type turtle = {
@@ -10,6 +12,10 @@ type turtle = {
     stands for current coordinates, and [angle] is the direction that the turtle
     is facing. [color] is the color of the trail the turtle will leave as it
     moves. *)
+
+val find_coordinate : int -> float -> int * int
+(** [find_coordinate angle length] is the coordinate dx, dy that is [length]
+    away in [angle]. *)
 
 val make_turtle : int -> int -> int -> color -> turtle
 (** [make_turtle x y angle color] is a new turtle at position [x] and [y],

@@ -114,6 +114,13 @@ let make_snowflake () =
   draw_triangle turtle 30;
   backward turtle 150.;
   left turtle 10;
+  teleport turtle 200 200;
+  change_angle turtle 90;
+  sidestep_left turtle 100.;
+  change_color turtle blue;
+  forward turtle 100.;
+  teleport turtle 500 500;
+  color_diamond turtle 200 350 black;
   ignore (wait_next_event [ Button_down ]);
   close_graph ()
 

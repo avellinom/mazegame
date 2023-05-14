@@ -3,12 +3,10 @@ open Turtle
 
 type color = int
 
-(** [find_endpoint_odd turtle r_float] is the endpoint of an odd-sided polygon
-    that is radius [r_float] from where the [turtle] is facing. *)
+(** [find_endpoint turtle r_float] is the endpoint of an odd-sided polygon that
+    is radius [r_float] from where the [turtle] is facing. *)
 let find_endpoint turtle r =
-  let rad = to_rad turtle.angle in
-  let dx = r *. cos rad |> int_of_float in
-  let dy = r *. sin rad |> int_of_float in
+  let dx, dy = find_coordinate turtle.angle r in
   let x = turtle.x + dx in
   let y = turtle.y + dy in
   (x, y)
@@ -40,6 +38,21 @@ let sqruare_endpts turtle r =
   left turtle 45;
   [| endpoint1; endpoint2; endpoint3; endpoint4 |]
 
+(** [diamond_endpts turtle w h] is an array containing endpoints of a diamond.
+    Refer to [draw_diamond] spec for what diamond it describes. *)
+let diamond_endpts turtle w h =
+  let w' = float_of_int w in
+  let h' = float_of_int h in
+  let endpoint1 = find_endpoint turtle h' in
+  left turtle 90;
+  let endpoint2 = find_endpoint turtle w' in
+  left turtle 90;
+  let endpoint3 = find_endpoint turtle h' in
+  left turtle 90;
+  let endpoint4 = find_endpoint turtle w' in
+  left turtle 90;
+  [| endpoint1; endpoint2; endpoint3; endpoint4 |]
+
 (** [pentagon_endpts turtle r] is an array containing endpoints of a pentagon.
     Refer to [draw_pentagon] spec for what pentagon it describes. *)
 let pentagon_endpts turtle r =
@@ -56,21 +69,18 @@ let pentagon_endpts turtle r =
   right turtle 72;
   [| endpoint1; endpoint2; endpoint3; endpoint4; endpoint5 |]
 
-(** [draw_triangle turtle r] is a triangle that has an endpoint radius [r] away
-    from where [turtle] is facing. *)
 let draw_triangle turtle r =
   let arr = triangle_endpts turtle r in
   draw_poly arr
 
-(** [draw_square turtle r] is a square. The square is determined by where the
-    [turtle] is facing. Going radius [r] from where [turtle] is facing will be
-    the middle of one side of the square. *)
 let draw_square turtle r =
   let arr = sqruare_endpts turtle r in
   draw_poly arr
 
-(** [draw_pentagon turtle r] is a pentagon that has an endpoint radius [r] away
-    from where [turtle] is facing. *)
+let draw_diamond turtle w h =
+  let arr = diamond_endpts turtle w h in
+  draw_poly arr
+
 let draw_pentagon turtle r =
   let arr = pentagon_endpts turtle r in
   draw_poly arr
@@ -94,13 +104,66 @@ let color_square turtle r c =
   fill_poly arr;
   set_color turtle.color
 
+let color_diamond turtle w h c =
+  set_color c;
+  let arr = diamond_endpts turtle w h in
+  fill_poly arr;
+  set_color turtle.color
+
 let color_pentagon turtle r c =
   set_color c;
   let arr = pentagon_endpts turtle r in
   fill_poly arr;
   set_color turtle.color
 
+type flake = turtle
+
+let init_snowflake x y angle color = make_turtle x y angle color
+
+(* Do not have higher than 4 depth *)
+let rec snowflake_side turtle length depth =
+  if depth = 0 then forward turtle length
+  else
+    let new_l = length /. 3. in
+    snowflake_side turtle new_l (depth - 1);
+    left turtle 60;
+    snowflake_side turtle new_l (depth - 1);
+    right turtle 120;
+    snowflake_side turtle new_l (depth - 1);
+    left turtle 60;
+    snowflake_side turtle new_l (depth - 1)
+
+let rec draw_snowflake turtle acc sides length depth =
+  if acc = 0 then ()
+  else (
+    snowflake_side turtle length depth;
+    right turtle (360 / sides);
+    draw_snowflake turtle (acc - 1) sides length depth)
+
+let draw_snowflake_centered turtle acc sides length depth =
+  draw_snowflake turtle acc sides length depth
+
+type seed = Turtle.turtle
+
+let init_tree x y angle color = make_turtle x y angle color
+
+let rec draw_tree seed depth length angle =
+  if depth = 0 then (
+    set_color green;
+    fill_ellipse (current_x ()) (current_y ())
+      (int_of_float (length /. 3.))
+      (int_of_float (length /. 2.)))
+  else (
+    forward seed length;
+    left seed angle;
+    draw_tree seed (depth - 1) (length *. 0.8) angle;
+    right seed (angle * 2);
+    draw_tree seed (depth - 1) (length *. 0.8) angle;
+    left seed angle;
+    backward seed length)
+
 type color_scheme =
+  | Blank
   | Red of int
   | Orange of int
   | Yellow of int
@@ -116,6 +179,7 @@ type color_scheme =
   | BlackWhite of int
 
 let palette = function
+  | Blank -> failwith "Blank can't have color."
   | Red 1 -> rgb 255 204 204
   | Red 2 -> rgb 255 153 153
   | Red 3 -> rgb 255 102 102
@@ -259,48 +323,11 @@ let palette = function
   | BlackWhite _ ->
       failwith "BlackWhite color scheme int must be between 1 and 9 inclusive."
 
-type flake = turtle
-
-let init_snowflake x y angle color = make_turtle x y angle color
-
-(* Do not have higher than 4 depth *)
-let rec snowflake_side turtle length depth =
-  if depth = 0 then forward turtle length
-  else
-    let new_l = length /. 3. in
-    snowflake_side turtle new_l (depth - 1);
-    left turtle 60;
-    snowflake_side turtle new_l (depth - 1);
-    right turtle 120;
-    snowflake_side turtle new_l (depth - 1);
-    left turtle 60;
-    snowflake_side turtle new_l (depth - 1)
-
-let rec draw_snowflake turtle acc sides length depth =
-  if acc = 0 then ()
-  else (
-    snowflake_side turtle length depth;
-    right turtle (360 / sides);
-    draw_snowflake turtle (acc - 1) sides length depth)
-
-let draw_snowflake_centered turtle acc sides length depth =
-  draw_snowflake turtle acc sides length depth
-
-type seed = Turtle.turtle
-
-let init_tree x y angle color = make_turtle x y angle color
-
-let rec draw_tree seed depth length angle =
-  if depth = 0 then (
-    set_color green;
-    fill_ellipse (current_x ()) (current_y ())
-      (int_of_float (length /. 3.))
-      (int_of_float (length /. 2.)))
-  else (
-    forward seed length;
-    left seed angle;
-    draw_tree seed (depth - 1) (length *. 0.8) angle;
-    right seed (angle * 2);
-    draw_tree seed (depth - 1) (length *. 0.8) angle;
-    left seed angle;
-    backward seed length)
+type pat =
+  | Circle of int * color_scheme
+  | Triangle of int * color_scheme
+  | Square of int * color_scheme
+  | Diamond of int * int * color_scheme
+  | Pentagon of int * color_scheme
+  | Tree
+  | Snowflake

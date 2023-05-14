@@ -13,3 +13,5 @@ Source of camel art : https://www.asciiart.eu/animals/camels
 Source of Egypt art : https://www.asciiart.eu/art-and-design/egyptian, https://ascii.co.uk/art/sphinx 
 Source of mazes : https://www.dcode.fr/maze-generator 
 Affine Cipher testing tool : https://www.dcode.fr/affine-cipher 
+
+Thanks to https://www.rapidtables.com/web/color/RGB_Color.html for providing RGB values for our color scheme.

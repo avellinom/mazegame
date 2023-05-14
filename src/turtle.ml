@@ -14,8 +14,6 @@ let change_color turtle c = turtle.color <- c
 let change_angle turtle angle = turtle.angle <- angle
 let to_rad angle = Float.pi /. 180. *. float_of_int angle
 
-(** [find_coordinate angle length] is the coordinate dx, dy that is [length]
-    away in [angle]. *)
 let find_coordinate angle length =
   let rad = to_rad angle in
   let dx = int_of_float (length *. cos rad) in
