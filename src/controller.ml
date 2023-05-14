@@ -1,9 +1,15 @@
 type maze_array = Maze.entry array array
 
+type key_status =
+  | NotPlaced
+  | NotFound of Crypt.affine_key
+  | Found of Crypt.affine_key
+
 type t = {
   mz_array : maze_array;
   user_location : Maze.location;
   user : User.t;
+  key_maybe : key_status;
 }
 
 exception InvalidMove
@@ -21,20 +27,36 @@ let location_is_free (mz_array : maze_array) (loc : Maze.location) : bool =
       | Free -> true
       | Goal -> true
       | Picture _ -> true
+      | Key _ -> true
       | _ -> false
     end
   | _ -> false
 
-let start_game (filename : string) (num_images : int) : t =
+let start_game (filename : string) (num_images : int) (drop_key : bool) : t =
   let mz = Maze.make filename in
-  let mz' = Maze.generate_images mz num_images in
-  let mz_array = Maze.array_of_maze mz' in
+  let mz = Maze.generate_images mz num_images in
+  let mz_array = Maze.array_of_maze mz in
   let usr = User.make () in
   match location_is_free mz_array (0, 0) with
   | true ->
-      mz_array.(0).(0) <- Person usr;
-      { mz_array; user_location = (0, 0); user = usr }
+      if drop_key then begin
+        let mz_with_key, gen_key = Maze.generate_key mz in
+        let mz_array_with_key = Maze.array_of_maze mz in
+        mz_array_with_key.(0).(0) <- Person usr;
+        {
+          mz_array = mz_array_with_key;
+          user_location = (0, 0);
+          user = usr;
+          key_maybe = NotFound gen_key;
+        }
+      end
+      else begin
+        mz_array.(0).(0) <- Person usr;
+        { mz_array; user_location = (0, 0); user = usr; key_maybe = NotPlaced }
+      end
   | false -> failwith "Error creating maze."
+
+let get_key_status (c : t) : key_status = c.key_maybe
 
 (** [move] represents the directions in which a user can make a move by one maze
     location. *)
@@ -65,8 +87,13 @@ let move_user (c : t) (move : move) : t =
       match location_is_free mz_array (x', y') with
       | true ->
           mz_array.(x).(y) <- Free;
+          let new_key_status =
+            match mz_array.(x').(y') with
+            | Key aff_key -> Found aff_key
+            | _ -> c.key_maybe
+          in
           mz_array.(x').(y') <- Person user;
-          { c with user_location = (x', y') }
+          { c with user_location = (x', y'); key_maybe = new_key_status }
       | false -> raise InvalidMove)
 
 let check_solved (c : t) : t =

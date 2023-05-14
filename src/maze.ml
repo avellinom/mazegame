@@ -71,7 +71,7 @@ let array_of_maze (m : t) : entry array array =
   done;
   new_array
 
-module RandomSet = Set.Make (struct
+module RandomLocationSet = Set.Make (struct
   type t = int * int
 
   (* This enforces the random order of the set. Note: [Random.self_init ()]
@@ -82,23 +82,29 @@ module RandomSet = Set.Make (struct
     Random.int 3 - 1
 end)
 
-let generate_images (m : t) (desired_image_count : int) : t =
-  let free_locations = ref RandomSet.empty in
+(** [find_free_locations m] finds all the locations in maze m that are 'Free'. *)
+let find_free_locations (m : t) : RandomLocationSet.t =
+  let free_locations = ref RandomLocationSet.empty in
   Array.iteri
     (fun row_i row ->
       Array.iteri
         (fun col_i entry ->
           match entry with
           | Free when row_i != 0 && col_i != 0 ->
-              free_locations := RandomSet.add (row_i, col_i) !free_locations
+              free_locations :=
+                RandomLocationSet.add (row_i, col_i) !free_locations
           | _ -> ())
         row)
     m;
+  !free_locations
+
+let generate_images (m : t) (desired_image_count : int) : t =
+  let free_locations = find_free_locations m in
   let desired_image_amount =
-    min desired_image_count (RandomSet.cardinal !free_locations)
+    min desired_image_count (RandomLocationSet.cardinal free_locations)
   in
   let images_added = ref 0 in
-  RandomSet.iter
+  RandomLocationSet.iter
     (fun random_location ->
       if !images_added < desired_image_amount then begin
         let x, y = random_location in
@@ -106,5 +112,13 @@ let generate_images (m : t) (desired_image_count : int) : t =
         incr images_added
       end
       else ())
-    !free_locations;
+    free_locations;
   m
+
+let generate_key (m : t) : t * Crypt.affine_key =
+  let free_locations = find_free_locations m in
+  let random_location = RandomLocationSet.choose free_locations in
+  let random_key = Crypt.generate_random_affine_key () in
+  let loc_x, loc_y = random_location in
+  m.(loc_x).(loc_y) <- Key random_key;
+  (m, random_key)

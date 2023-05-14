@@ -27,7 +27,7 @@ let console_color : ANSITerminal.style = red
 let console_subcolor : style = magenta
 
 (* The color that the maze is displayed in. *)
-let maze_displaycolor : style = magenta
+let maze_displaycolor : style = cyan
 
 (* [string_of_file f] converts the contents of filename f into a string.
    Citation:
@@ -58,6 +58,11 @@ let sphinx_art : string =
 (* The tomb that is displayed at the beginning of the tomb level. *)
 let pharaoh_art : string =
   string_of_file (data_ascii_art_prefix ^ "tomb-pharaoh.txt")
+
+(* The top secret message that is encrypted and decrypted with the key in the
+   maze. *)
+let secret_message : string = "tutankhamun was a camel"
+let encrypted_message : string ref = ref ""
 
 (** [begin_console ()] begins the console. It displays the initial instructions
     of the game to the user. *)
@@ -177,6 +182,22 @@ let rec perform_movement (game_ctrl : Controller.t) (dir : direction) : unit =
   | MazeSolved ->
       print_string [ console_color ]
         "Congratulations! You traversed the maze.\n";
+      begin
+        match Controller.get_key_status game_ctrl with
+        | NotFound _ ->
+            print_string [ console_color ]
+              "You did not find the key. Better luck next time.\n"
+        | NotPlaced -> ()
+        | Found key ->
+            print_string [ console_color ] "Wow! You found the key.\n";
+            print_string [ console_color ] "Let's see the message: \n";
+            let decrypted_secret_message =
+              Crypt.affine_decrypt !encrypted_message key
+            in
+            print_string [ yellow ]
+              ("\n\t" ^ decrypted_secret_message ^ "\t\n\n")
+      end;
+
       print_string [ console_color ] "Welcome back to the console.\n";
       print_string [ console_subcolor ]
         "\n\
@@ -206,7 +227,6 @@ and perform_instruction (input : instruction) : unit =
             print_string [ console_color ] pyramid_cats_art;
             print_string [ console_color ]
               "\nCan you navigate around Giza, Khafre, and Menkaure?\n\n";
-
             ("pyramid.mz", 0)
         | Sphinx ->
             print_string [ console_color ] "\n\t -- SPHINX -- \n";
@@ -228,7 +248,22 @@ and perform_instruction (input : instruction) : unit =
             ("tomb.mz", 5)
       in
       let filepath = data_dir_prefix ^ maze_typ in
-      let game_ctrl = Controller.start_game filepath image_count in
+      let game_ctrl =
+        if typ = Tomb then begin
+          let game_ctrl_with_key =
+            Controller.start_game filepath image_count true
+          in
+          match Controller.get_key_status game_ctrl_with_key with
+          | NotPlaced -> failwith "Key must have been placed"
+          | Found _ -> failwith "Key can not initially be found"
+          | NotFound affine_key ->
+              encrypted_message :=
+                Crypt.affine_encrypt secret_message affine_key;
+              print_string [ yellow ] ("\t" ^ !encrypted_message ^ "\t\n\n");
+              game_ctrl_with_key
+        end
+        else Controller.start_game filepath image_count false
+      in
       print_string [ console_subcolor ]
         "Here is the maze. Note that you are 'p' and start in the top left \
          corner.\n\

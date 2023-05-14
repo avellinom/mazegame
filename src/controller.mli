@@ -2,10 +2,20 @@ type t
 (** [t] is the abstract type representing a controller for a Maze Game. This is
     where the user provides instructions to the Maze Game. *)
 
-val start_game : string -> int -> t
-(** [start_game f n] starts a game by generating a maze from file [f]. The game
-    will have n images in its maze. Raises: [Failure] if f is not a valid maze
-    file. *)
+val start_game : string -> int -> bool -> t
+(** [start_game f b n] starts a game by generating a maze from file [f]. The
+    game will have n images in its maze and one key iff b. Raises: [Failure] if
+    f is not a valid maze file. *)
+
+type key_status =
+  | NotPlaced
+  | NotFound of Crypt.affine_key
+  | Found of Crypt.affine_key
+
+val get_key_status : t -> key_status
+(** [get_key_status c] returns NotPlaced if a key was never placed on the maze.
+    Otherwise, it returns Found if the key was found by the user and NotFound
+    otherwise. *)
 
 val print_game : t -> ANSITerminal.style -> unit
 (** [print_game c] prints the state of the game to the command line. *)

@@ -34,3 +34,8 @@ val generate_images : t -> int -> t
 (** [generate_images m p] generates random images and places them at random
     locations that are available in maze m. p is the approximate amount of
     images to be dropped on the maze. *)
+
+val generate_key : t -> t * Crypt.affine_key
+(** [generate_key m] generates a key for cryptographic use and drops it randomly
+    on an available square in the maze. It returns the new maze containing the
+    dropped key and the key as a pair. *)
