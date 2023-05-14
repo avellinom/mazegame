@@ -221,6 +221,10 @@ let rec perform_movement (game_ctrl : Controller.t) (dir : direction) : unit =
         images_found;
       (* TODO: update this to reveal images*)
       print_string [ console_color ] "Welcome back to the console.\n";
+      print_string [ console_subcolor ]
+        "\n\
+         Remember: The available selections are {tourist, pyramid, sphinx, \
+         tomb}.\n";
       let user_instruction = process_raw_selection () in
       perform_instruction user_instruction
 

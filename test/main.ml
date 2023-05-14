@@ -55,6 +55,18 @@ let solved_game_test (name : string)
     (solved_move_sequence : unit -> Controller.t) : test =
   name >:: fun _ -> assert_raises MazeSolved solved_move_sequence
 
+(* This sequence puts the player one above the goal on the pyramid maze. *)
+let get_close_to_pyramid_maze_exit (image_amount : int) : Controller.t =
+  make_game Pyramid image_amount
+  |> move_right |> move_down |> move_down |> move_down |> move_down |> move_down
+  |> move_down |> move_down |> move_down |> move_down |> move_right
+  |> move_right |> move_right |> move_right |> move_right |> move_right
+  |> move_right |> move_right |> move_right |> move_right |> move_right
+  |> move_right |> move_right |> move_right |> move_right |> move_right
+  |> move_right |> move_right |> move_right |> move_right |> move_right
+  |> move_right |> move_right |> move_right |> move_right |> move_right
+  |> move_right |> move_right |> move_right
+
 (* This sequence puts the player one above the goal on the sphinx maze. *)
 let get_close_to_sphinx_maze_exit (image_amount : int) : Controller.t =
   make_game Sphinx image_amount
@@ -84,199 +96,268 @@ let get_close_to_tomb_maze_exit (image_amount : int) : Controller.t =
 
 let controller_tests =
   [
-    (* Emmpty maze simple inital movement *)
-    valid_game_test "User can go right initially on empty maze"
+    (* Tourist maze simple inital movement *)
+    valid_game_test "User can go right initially on tourist maze"
       (make_game Tourist 0 |> move_right)
       false;
-    valid_game_test "User can go down initially on empty maze"
+    valid_game_test "User can go down initially on tourist maze"
       (make_game Tourist 0 |> move_down)
       false;
-    invalid_move_game_test "User cannot move left initially on empty maze"
+    invalid_move_game_test "User cannot move left initially on tourist maze"
       (fun () -> make_game Tourist 0 |> move_left);
-    invalid_move_game_test "User cannot move up initially on empty maze"
+    invalid_move_game_test "User cannot move up initially on tourist maze"
       (fun () -> make_game Tourist 0 |> move_up);
-    (* Small maze simple initial movement *)
-    valid_game_test "User can go right initially on small maze"
+    (* Pyramid maze simple initial movement *)
+    valid_game_test "User can go right initially on pyramid maze"
+      (make_game Pyramid 0 |> move_right)
+      false;
+    valid_game_test "User can go down initially on pyramid maze"
+      (make_game Pyramid 0 |> move_down)
+      false;
+    invalid_move_game_test "User cannot move left initially on pyramid maze"
+      (fun () -> make_game Pyramid 0 |> move_left);
+    invalid_move_game_test "User cannot move up initially on pyramid maze"
+      (fun () -> make_game Pyramid 0 |> move_up);
+    (* Sphinx maze simple initial movement *)
+    valid_game_test "User can go right initially on sphinx maze"
       (make_game Sphinx 0 |> move_right)
       false;
-    valid_game_test "User can go down initially on small maze"
+    valid_game_test "User can go down initially on sphinx maze"
       (make_game Sphinx 0 |> move_down)
       false;
-    invalid_move_game_test "User cannot move left initially on small maze"
+    invalid_move_game_test "User cannot move left initially on sphinx maze"
       (fun () -> make_game Sphinx 0 |> move_left);
-    invalid_move_game_test "User cannot move up initially on small maze"
+    invalid_move_game_test "User cannot move up initially on sphinx maze"
       (fun () -> make_game Sphinx 0 |> move_up);
-    (* Large maze simple initial movement *)
-    valid_game_test "User can go right initially on large maze"
+    (* Tomb maze simple initial movement *)
+    valid_game_test "User can go right initially on tomb maze"
       (make_game Tomb 0 |> move_right)
       false;
-    valid_game_test "User can go down initially on large maze"
+    valid_game_test "User can go down initially on tomb maze"
       (make_game Tomb 0 |> move_down)
       false;
-    invalid_move_game_test "User cannot move left initially on large maze"
+    invalid_move_game_test "User cannot move left initially on tomb maze"
       (fun () -> make_game Tomb 0 |> move_left);
-    invalid_move_game_test "User cannot move up initially on large maze"
+    invalid_move_game_test "User cannot move up initially on tomb maze"
       (fun () -> make_game Tomb 0 |> move_up);
     (* Mazes can be generated with images *)
-    valid_game_test "Empty maze can have images dropped on it"
+    valid_game_test "Tourist maze can have images dropped on it"
       (make_game Tourist 3) false;
-    valid_game_test "Small maze can have images dropped on it"
+    valid_game_test "Pyramid maze can have images dropped on it"
+      (make_game Pyramid 3) false;
+    valid_game_test "Sphinx maze can have images dropped on it"
       (make_game Sphinx 3) false;
-    valid_game_test "Large maze can have images dropped on it"
-      (make_game Tomb 3) false;
+    valid_game_test "Tomb maze can have images dropped on it" (make_game Tomb 3)
+      false;
     (* Mazes can be generated with more images than available maze locations*)
-    valid_game_test "Empty maze survives with extreme image count"
+    valid_game_test "Tourist maze survives with extreme image count"
       (make_game Tourist 10000) false;
-    valid_game_test "Small maze can be constructed with extreme image count"
+    valid_game_test "Pyramid maze can be constructed with extreme image count"
+      (make_game Pyramid 10000) false;
+    valid_game_test "Sphinx maze can be constructed with extreme image count"
       (make_game Sphinx 10000) false;
-    valid_game_test "Large maze can be constructed with extreme image count"
+    valid_game_test "Tomb maze can be constructed with extreme image count"
       (make_game Tomb 10000) false;
     (* It is OK for a user to be adjacent to a barrier on its right *)
-    valid_game_test "User can approach barrier from left on empty maze"
+    valid_game_test "User can approach barrier from left on tourist maze"
       (make_game Tourist 0 |> move_down |> move_right)
       false;
-    valid_game_test "User can approach barrier from left on small maze"
+    valid_game_test "User can approach barrier from left on pyramid maze"
+      (make_game Pyramid 0 |> move_right |> move_down |> move_down |> move_right
+     |> move_right |> move_right |> move_right |> move_right |> move_right)
+      false;
+    valid_game_test "User can approach barrier from left on sphinx maze"
       (make_game Sphinx 0 |> move_right |> move_right)
       false;
-    valid_game_test "User can approach barrier from left on large maze"
+    valid_game_test "User can approach barrier from left on tomb maze"
       (make_game Tomb 0 |> move_right |> move_right)
       false;
     (* It is OK for a user to be adjacent to a barrier above it *)
-    valid_game_test "User can approach barrier from beneath it on empty maze"
+    valid_game_test "User can approach barrier from beneath it on tourist maze"
       (make_game Tourist 0 |> move_down |> move_down |> move_right |> move_right)
       false;
-    valid_game_test "User can approach barrier from beneath it on small maze"
+    valid_game_test "User can approach barrier from beneath it on pyramid maze"
+      (make_game Pyramid 0 |> move_down |> move_right |> move_right
+     |> move_right)
+      false;
+    valid_game_test "User can approach barrier from beneath it on sphinx maze"
       (make_game Sphinx 0 |> move_down |> move_right |> move_right |> move_right)
       false;
-    valid_game_test "User can approach barrier from beneath it on large maze"
+    valid_game_test "User can approach barrier from beneath it on tomb maze"
       (make_game Tomb 0 |> move_right |> move_down |> move_down |> move_down
      |> move_right |> move_right)
       false;
     (* It is OK for a user to be adjacent to a barrier beneath it *)
-    valid_game_test "User can approach barrier from above it on empty maze"
+    valid_game_test "User can approach barrier from above it on tourist maze"
       (make_game Tourist 0 |> move_right |> move_right)
       false;
-    valid_game_test "User can approach barrier from above it on small maze"
+    valid_game_test "User can approach barrier from above it on pyramid maze"
+      (make_game Pyramid 0 |> move_down |> move_right |> move_right
+     |> move_right |> move_right |> move_right |> move_right |> move_right
+     |> move_right |> move_right)
+      false;
+    valid_game_test "User can approach barrier from above it on sphinx maze"
       (make_game Sphinx 0 |> move_down)
       false;
-    valid_game_test "User can approach barrier from above it on large maze"
+    valid_game_test "User can approach barrier from above it on tomb maze"
       (make_game Tomb 0 |> move_down)
       false;
     (* It is OK for a user to be adjacent to a barrier on its left *)
-    valid_game_test "User can approach barrier from its right on empty maze"
+    valid_game_test "User can approach barrier from its right on tourist maze"
       (make_game Tourist 0 |> move_right |> move_right |> move_right
      |> move_down)
       false;
-    valid_game_test "User can approach barrier from its right on small maze"
+    valid_game_test "User can approach barrier from its right on pyramid maze"
+      (make_game Pyramid 0 |> move_down |> move_right |> move_right
+     |> move_right |> move_right |> move_right |> move_right |> move_right
+     |> move_right |> move_right |> move_right |> move_right |> move_down)
+      false;
+    valid_game_test "User can approach barrier from its right on sphinx maze"
       (make_game Sphinx 0 |> move_down |> move_right |> move_right |> move_right
      |> move_right |> move_down)
       false;
-    valid_game_test "User can approach barrier from its right on large maze"
+    valid_game_test "User can approach barrier from its right on tomb maze"
       (make_game Tomb 0 |> move_right |> move_down |> move_down)
       false;
     (* A user cannot move into a wall on its right *)
     invalid_move_game_test
-      "User cannot move into wall on its right on empty maze" (fun () ->
+      "User cannot move into wall on its right on tourist maze" (fun () ->
         make_game Tourist 0 |> move_down |> move_right |> move_right);
     invalid_move_game_test
-      "User cannot move into wall on its right on small maze" (fun () ->
+      "User cannot move into wall on its right from pyramid maze" (fun () ->
+        make_game Pyramid 0 |> move_down |> move_right |> move_down
+        |> move_right |> move_right |> move_right |> move_right |> move_right
+        |> move_right |> move_right |> move_right);
+    invalid_move_game_test
+      "User cannot move into wall on its right on sphinx maze" (fun () ->
         make_game Sphinx 0 |> move_right |> move_right |> move_right);
     invalid_move_game_test
-      "User cannot move into wall on its right on large maze" (fun () ->
+      "User cannot move into wall on its right on tomb maze" (fun () ->
         make_game Tomb 0 |> move_right |> move_right |> move_right);
     (* A user cannot move into a wall above it *)
-    invalid_move_game_test "User cannot move into wall above it on empty maze"
+    invalid_move_game_test "User cannot move into wall above it on tourist maze"
       (fun () ->
         make_game Tourist 0 |> move_down |> move_down |> move_right
         |> move_right |> move_up);
-    invalid_move_game_test "User cannot move into wall above it on small maze"
+    invalid_move_game_test "User cannot move into wall above it on pyramid maze"
+      (fun () ->
+        make_game Pyramid 0 |> move_down |> move_right |> move_right
+        |> move_right |> move_up);
+    invalid_move_game_test "User cannot move into wall above it on sphinx maze"
       (fun () ->
         make_game Sphinx 0 |> move_down |> move_right |> move_right
         |> move_right |> move_up);
-    invalid_move_game_test "User cannot move into wall above it on large maze"
+    invalid_move_game_test "User cannot move into wall above it on tomb maze"
       (fun () ->
         make_game Tomb 0 |> move_right |> move_down |> move_down |> move_down
         |> move_right |> move_right |> move_up);
     (* A user cannot move into a wall beneath it *)
-    invalid_move_game_test "User cannot move into wall beneath it on empty maze"
-      (fun () -> make_game Tourist 0 |> move_right |> move_right |> move_down);
-    invalid_move_game_test "User cannot move into wall beneath it on small maze"
-      (fun () -> make_game Sphinx 0 |> move_down |> move_down);
-    invalid_move_game_test "User cannot move into wall beneath it on large maze"
+    invalid_move_game_test
+      "User cannot move into wall beneath it on tourist maze" (fun () ->
+        make_game Tourist 0 |> move_right |> move_right |> move_down);
+    invalid_move_game_test
+      "User cannot move into wall beneath it on pyramid maze" (fun () ->
+        make_game Pyramid 0 |> move_down |> move_right |> move_right
+        |> move_right |> move_right |> move_right |> move_right |> move_right
+        |> move_right |> move_right |> move_down);
+    invalid_move_game_test
+      "User cannot move into wall beneath it on sphinx maze" (fun () ->
+        make_game Sphinx 0 |> move_down |> move_down);
+    invalid_move_game_test "User cannot move into wall beneath it on tomb maze"
       (fun () -> make_game Tomb 0 |> move_down |> move_down);
     (* A user cannot move into a wall on its left *)
     invalid_move_game_test
-      "User cannot move into wall on its left on empty maze" (fun () ->
+      "User cannot move into wall on its left on tourist maze" (fun () ->
         make_game Tourist 0 |> move_right |> move_right |> move_right
         |> move_down |> move_left);
     invalid_move_game_test
-      "User cannot move into wall on its left on small maze" (fun () ->
+      "User cannot move into wall on its left on pyramid maze" (fun () ->
+        make_game Pyramid 0 |> move_right |> move_down |> move_down |> move_left);
+    invalid_move_game_test
+      "User cannot move into wall on its left on sphinx maze" (fun () ->
         make_game Sphinx 0 |> move_right |> move_right |> move_down
         |> move_right |> move_right |> move_down |> move_left);
-    invalid_move_game_test
-      "User cannot move into wall on its left on large maze" (fun () ->
+    invalid_move_game_test "User cannot move into wall on its left on tomb maze"
+      (fun () ->
         make_game Tomb 0 |> move_right |> move_down |> move_down |> move_left);
     (* A user cannot move off the board by moving right *)
     invalid_move_game_test
-      "User cannot move off the board by moving right on empty maze" (fun () ->
+      "User cannot move off the board by moving right on tourist maze"
+      (fun () ->
         make_game Tourist 0 |> move_right |> move_right |> move_right
         |> move_right |> move_right);
     invalid_move_game_test
-      "User cannot move off the board by moving right on small maze" (fun () ->
+      "User cannot move off the board by moving right on pyramid maze"
+      (fun () -> get_close_to_pyramid_maze_exit 0 |> move_right);
+    invalid_move_game_test
+      "User cannot move off the board by moving right on sphinx maze" (fun () ->
         get_close_to_sphinx_maze_exit 0 |> move_right);
     invalid_move_game_test
-      "User cannot move off the board by moving right on large maze" (fun () ->
+      "User cannot move off the board by moving right on tomb maze" (fun () ->
         get_close_to_tomb_maze_exit 0 |> move_right);
     (* A user cannot move off the board by moving up *)
     invalid_move_game_test
-      "User cannot move off the board by moving up on empty maze" (fun () ->
+      "User cannot move off the board by moving up on tourist maze" (fun () ->
         make_game Tourist 0 |> move_right |> move_up);
     invalid_move_game_test
-      "User cannot move off the board by moving up on small maze" (fun () ->
+      "User cannot move off the board by moving up on tourist maze" (fun () ->
+        make_game Tourist 0 |> move_right |> move_up);
+    invalid_move_game_test
+      "User cannot move off the board by moving up on sphinx maze" (fun () ->
         make_game Sphinx 0 |> move_right |> move_up);
     invalid_move_game_test
-      "User cannot move off the board by moving up on large maze" (fun () ->
+      "User cannot move off the board by moving up on tomb maze" (fun () ->
         make_game Tomb 0 |> move_right |> move_up);
     (* A user cannot move off the board by moving down *)
     invalid_move_game_test
-      "User cannot move off the board by moving down on empty maze" (fun () ->
+      "User cannot move off the board by moving down on tourist maze" (fun () ->
         make_game Tourist 0 |> move_down |> move_down |> move_down);
     invalid_move_game_test
-      "User cannot move off the board by moving down on small maze" (fun () ->
+      "User cannot move off the board by moving down on pyramid maze" (fun () ->
+        get_close_to_pyramid_maze_exit 0 |> move_left |> move_down |> move_down);
+    invalid_move_game_test
+      "User cannot move off the board by moving down on sphinx maze" (fun () ->
         get_close_to_sphinx_maze_exit 0 |> move_left |> move_down |> move_down);
     invalid_move_game_test
-      "User cannot move off the board by moving down on large maze" (fun () ->
+      "User cannot move off the board by moving down on tomb maze" (fun () ->
         get_close_to_tomb_maze_exit 0 |> move_left |> move_down |> move_down);
     (* A user cannot move off the board by moving left *)
     invalid_move_game_test
-      "User cannot move off the board by moving left on empty maze" (fun () ->
+      "User cannot move off the board by moving left on tourist maze" (fun () ->
         make_game Tourist 0 |> move_down |> move_left);
     invalid_move_game_test
-      "User cannot move off the board by moving left on small maze" (fun () ->
+      "User cannot move off the board by moving left on pyramid maze" (fun () ->
+        make_game Pyramid 0 |> move_down |> move_left);
+    invalid_move_game_test
+      "User cannot move off the board by moving left on sphinx maze" (fun () ->
         make_game Sphinx 0 |> move_down |> move_left);
     invalid_move_game_test
-      "User cannot move off the board by moving left on large maze" (fun () ->
+      "User cannot move off the board by moving left on tomb maze" (fun () ->
         make_game Tomb 0 |> move_down |> move_left);
     (* Solvability without images *)
-    solved_game_test "User can solve empty maze by tracing top and right edges"
-      (fun () ->
+    solved_game_test
+      "User can solve tourist maze by tracing top and right edges" (fun () ->
         make_game Tourist 0 |> move_right |> move_right |> move_right
         |> move_right |> move_down |> move_down);
     solved_game_test
-      "User can solve empty maze by tracing left and bottom edges" (fun () ->
+      "User can solve tourist maze by tracing left and bottom edges" (fun () ->
         make_game Tourist 0 |> move_down |> move_down |> move_right
         |> move_right |> move_right |> move_right);
-    solved_game_test "User can solve small maze" (fun () ->
+    solved_game_test "User can solve pyramid maze" (fun () ->
+        get_close_to_pyramid_maze_exit 0 |> move_down);
+    solved_game_test "User can solve sphinx maze" (fun () ->
         get_close_to_sphinx_maze_exit 0 |> move_down);
-    solved_game_test "User can solve large maze" (fun () ->
+    solved_game_test "User can solve tomb maze" (fun () ->
         get_close_to_tomb_maze_exit 0 |> move_down);
     (* Solvability with images *)
-    solved_game_test "User can solve empty maze with images" (fun () ->
+    solved_game_test "User can solve tourist maze with images" (fun () ->
         make_game Tourist 5 |> move_down |> move_down |> move_right
         |> move_right |> move_right |> move_right);
-    solved_game_test "User can solve small maze with images" (fun () ->
+    solved_game_test "User can solve pyramid maze with images" (fun () ->
+        get_close_to_pyramid_maze_exit 10 |> move_down);
+    solved_game_test "User can solve sphinx maze with images" (fun () ->
         get_close_to_sphinx_maze_exit 10 |> move_down);
-    solved_game_test "User can solve large maze with images" (fun () ->
+    solved_game_test "User can solve tomb maze with images" (fun () ->
         get_close_to_tomb_maze_exit 25 |> move_down);
   ]
 
