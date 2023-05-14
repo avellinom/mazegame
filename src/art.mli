@@ -58,3 +58,28 @@ val color_pentagon : turtle -> int -> int -> unit
 val color_circle : turtle -> int -> int -> unit
 (** [color_circle turtle r c] is a circle of color [c] with radius [r] at the
     location of [turtle]. *)
+
+type flake = turtle
+
+val init_snowflake : int -> int -> int -> int -> flake
+(** [init_snowflake x y angle color] is the [flake]. It marks the an endpoint of
+    a snowflake at coordinate ([x], [y]) facing [angle] in [color]. *)
+
+val snowflake_side : flake -> float -> int -> unit
+(** [snowflake_side turtle length depth] is one side of a snowflake. *)
+
+val draw_snowflake : flake -> int -> int -> float -> int -> unit
+(** [draw_snowflake flake acc sides length depth] is a snowflake with [sides] of
+    each [length] with [depth]. Precondition: [sides] must equal [acc]*)
+
+type seed = turtle
+(** [seed] is the initial characteristics of a tree. The characteristics include
+    initial position, color, and angle that it will start growing. *)
+
+val init_tree : int -> int -> int -> int -> seed
+(** [init_tree x y angle color] is the [seed]. It marks the beginning of a tree
+    at coordinate ([x], [y]) facing [angle] in [color]. *)
+
+val draw_tree : seed -> int -> float -> int -> unit
+(** [draw_tree seed depth length angle] is a tree with initial branch/trunk
+    [length]. [angle] determines how wide the branches go. *)

@@ -1,17 +1,25 @@
+type color = int
+
 type turtle = {
   mutable x : int;
   mutable y : int;
   mutable angle : int;
-  mutable color : int;
+  mutable color : color;
 }
 (** [turtle] is an object that represents the current location. [x] and [y]
     stands for current coordinates, and [angle] is the direction that the turtle
     is facing. [color] is the color of the trail the turtle will leave as it
-    moves.*)
+    moves. *)
 
-val make_turtle : int -> int -> int -> int -> turtle
+val make_turtle : int -> int -> int -> color -> turtle
 (** [make_turtle x y angle color] is a new turtle at position [x] and [y],
     facing [angle] in [color]. *)
+
+val change_color : turtle -> color -> unit
+(** [change_color turtle c] changes the color of the turtle to [c]. *)
+
+val change_angle : turtle -> int -> unit
+(** [change_angle turtle angle] changes the angle of the [turtle] to [angle]. *)
 
 val to_rad : int -> float
 (** [to_rad angle] is angle in radians. *)

@@ -1,13 +1,17 @@
 open Graphics
 
+type color = int
+
 type turtle = {
   mutable x : int;
   mutable y : int;
   mutable angle : int;
-  mutable color : int;
+  mutable color : color;
 }
 
 let make_turtle x y angle color = { x; y; angle; color }
+let change_color turtle c = turtle.color <- c
+let change_angle turtle angle = turtle.angle <- angle
 let to_rad angle = Float.pi /. 180. *. float_of_int angle
 
 (** [move_turtle turtle l] moves the [turtle] by length [l] in the angle of

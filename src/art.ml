@@ -258,3 +258,49 @@ let palette = function
   | BlackWhite 9 -> rgb 0 0 0
   | BlackWhite _ ->
       failwith "BlackWhite color scheme int must be between 1 and 9 inclusive."
+
+type flake = turtle
+
+let init_snowflake x y angle color = make_turtle x y angle color
+
+(* Do not have higher than 4 depth *)
+let rec snowflake_side turtle length depth =
+  if depth = 0 then forward turtle length
+  else
+    let new_l = length /. 3. in
+    snowflake_side turtle new_l (depth - 1);
+    left turtle 60;
+    snowflake_side turtle new_l (depth - 1);
+    right turtle 120;
+    snowflake_side turtle new_l (depth - 1);
+    left turtle 60;
+    snowflake_side turtle new_l (depth - 1)
+
+let rec draw_snowflake turtle acc sides length depth =
+  if acc = 0 then ()
+  else (
+    snowflake_side turtle length depth;
+    right turtle (360 / sides);
+    draw_snowflake turtle (acc - 1) sides length depth)
+
+let draw_snowflake_centered turtle acc sides length depth =
+  draw_snowflake turtle acc sides length depth
+
+type seed = Turtle.turtle
+
+let init_tree x y angle color = make_turtle x y angle color
+
+let rec draw_tree seed depth length angle =
+  if depth = 0 then (
+    set_color green;
+    fill_ellipse (current_x ()) (current_y ())
+      (int_of_float (length /. 3.))
+      (int_of_float (length /. 2.)))
+  else (
+    forward seed length;
+    left seed angle;
+    draw_tree seed (depth - 1) (length *. 0.8) angle;
+    right seed (angle * 2);
+    draw_tree seed (depth - 1) (length *. 0.8) angle;
+    left seed angle;
+    backward seed length)
