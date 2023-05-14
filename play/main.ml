@@ -46,6 +46,11 @@ let camel_art : string =
 let lone_pyramid_art : string =
   string_of_file (data_ascii_art_prefix ^ "tourist-pyramid.txt")
 
+(* The pyramid with cats that is displayed at the beginning of the pyramid
+   level. *)
+let pyramid_cats_art : string =
+  string_of_file (data_ascii_art_prefix ^ "pyramid-cats.txt")
+
 (* The sphinx that is displayed at the beginning of the sphinx level. *)
 let sphinx_art : string =
   string_of_file (data_ascii_art_prefix ^ "sphinx-cat.txt")
@@ -147,7 +152,7 @@ let rec process_raw_movement (game_ctrl : Controller.t) : direction =
       | "s" -> Down
       | _ ->
           print_string [ console_subcolor ]
-            "That direction is not available. Available sizes are {left, \
+            "That direction is not available. Available moves are {left, \
              right, up, down}.";
           process_raw_movement game_ctrl
     end
@@ -170,7 +175,8 @@ let rec perform_movement (game_ctrl : Controller.t) (dir : direction) : unit =
       let dir' = process_raw_movement game_ctrl in
       perform_movement game_ctrl dir'
   | MazeSolved ->
-      print_string [ console_color ] "Congratulations! You won the Maze Game.\n";
+      print_string [ console_color ]
+        "Congratulations! You traversed the maze.\n";
       let images_found = Controller.get_all_collected_images game_ctrl in
       List.iteri
         (fun index element ->
@@ -201,7 +207,13 @@ and perform_instruction (input : instruction) : unit =
                A tourist I see... Let's see if you can dance around the \
                pyramid Giza.\n\n";
             ("tourist.mz", 0)
-        | Pyramid -> ("pyramid.mz", 0)
+        | Pyramid ->
+            print_string [ console_color ] "\n\t\t\t -- PYRAMID -- \n";
+            print_string [ console_color ] pyramid_cats_art;
+            print_string [ console_color ]
+              "\nCan you navigate around Giza, Khafre, and Menkaure?\n\n";
+
+            ("pyramid.mz", 0)
         | Sphinx ->
             print_string [ console_color ] "\n\t -- SPHINX -- \n";
             print_string [ console_color ] sphinx_art;
