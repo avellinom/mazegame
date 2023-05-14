@@ -1,0 +1,21 @@
+---
+group:
+  - name: Jun Jang
+    netid: jj578
+  - name: Michael Avellino
+    netid: mca63
+  - name: Alexey Elkin
+    netid: ae339
+pm:
+  name: Sydney Tran
+  netid: sdt35
+publish: true
+title: "Explore the mazes of Egypt: Collect ancient artifacts and decrypt tomb secrets"
+git-repo: "https://github.coecis.cornell.edu/jj578/maze_generator"
+demo-video-url: ""
+desc: >
+  Our project is a maze game centered in Egypt. Explore four mazes of 
+  increasing difficulty: tourist, pyramid, sphinx, and tomb. At the sphinx and 
+  tomb, you may discover ancient artifacts, which you can collect and view. At
+  the tomb, you may find a key which can be used to decrypt a secret message 
+  at the tomb's door.
