@@ -17,7 +17,8 @@ let make_snowflake () =
   open_graph " 1000x1000";
   let turtle = init_snowflake 500 500 90 black in
   (* snowflake_side turtle 100. 4; *)
-  draw_snowflake turtle 8 8 100. 3;
+  color_pentagon turtle 200 green;
+  draw_snowflake turtle 6 6 60. 2;
   draw_triangle turtle 100;
   draw_square turtle 300;
   draw_pentagon turtle 200;

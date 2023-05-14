@@ -72,3 +72,28 @@ let draw_square turtle r =
 let draw_pentagon turtle r =
   let arr = pentagon_endpts turtle r in
   draw_poly arr
+
+let draw_circle turtle r = Graphics.draw_circle turtle.x turtle.y r
+
+let color_circle turtle r c =
+  set_color c;
+  fill_circle turtle.x turtle.y r;
+  set_color turtle.color
+
+let color_triangle turtle r c =
+  set_color c;
+  let arr = triangle_endpts turtle r in
+  fill_poly arr;
+  set_color turtle.color
+
+let color_square turtle r c =
+  set_color c;
+  let arr = sqruare_endpts turtle r in
+  fill_poly arr;
+  set_color turtle.color
+
+let color_pentagon turtle r c =
+  set_color c;
+  let arr = pentagon_endpts turtle r in
+  fill_poly arr;
+  set_color turtle.color
