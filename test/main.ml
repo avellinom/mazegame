@@ -360,5 +360,49 @@ let controller_tests =
         get_close_to_tomb_maze_exit 25 |> move_down);
   ]
 
-let tests = "Maze Game tests" >::: List.flatten [ controller_tests ]
+(* The lowercase English alphabet. *)
+let lowercase_alphabet : string = "abcdefghijklmnopqrstuvwxyz"
+
+(** [test_affine_encrypt n p k c] creates a test named n. Encrypting p with k
+    should yield c. *)
+let test_affine_encrypt (name : string) (plaintext : string)
+    (key : Crypt.affine_key) (expected_ciphertext : string) : test =
+  name >:: fun _ ->
+  assert_equal expected_ciphertext
+    (Crypt.affine_encrypt plaintext key)
+    ~printer:Fun.id
+
+let cryptography_tests =
+  [
+    (* Specific instance (a=1) where Affine turns into a Caesar cipher *)
+    test_affine_encrypt "Caesar equivalent, 1 shift right" lowercase_alphabet
+      (Crypt.generate_determined_affine_key 1 1)
+      "bcdefghijklmnopqrstuvwxyza";
+    test_affine_encrypt "Caesar equivalent, 7 shifts right" lowercase_alphabet
+      (Crypt.generate_determined_affine_key 1 7)
+      "hijklmnopqrstuvwxyzabcdefg";
+    test_affine_encrypt "Caesar equivalent, 26 shifts right" lowercase_alphabet
+      (Crypt.generate_determined_affine_key 1 26)
+      lowercase_alphabet;
+    test_affine_encrypt "Caesar equivalent, shift more than 26 times"
+      lowercase_alphabet
+      (Crypt.generate_determined_affine_key 1 70)
+      "stuvwxyzabcdefghijklmnopqr";
+    test_affine_encrypt "In key=(a,b), use small a and zero b"
+      lowercase_alphabet
+      (Crypt.generate_determined_affine_key 3 0)
+      "adgjmpsvybehknqtwzcfilorux";
+    test_affine_encrypt "In key=(a,b), use small a and moderate b"
+      lowercase_alphabet
+      (Crypt.generate_determined_affine_key 5 12)
+      "mrwbglqvafkpuzejotydinsxch";
+    test_affine_encrypt "In key=(a,b), use small a and large b"
+      lowercase_alphabet
+      (Crypt.generate_determined_affine_key 3 24)
+      "ybehknqtwzcfiloruxadgjmpsv";
+  ]
+
+let tests =
+  "Maze Game tests" >::: List.flatten [ controller_tests @ cryptography_tests ]
+
 let _ = run_test_tt_main tests

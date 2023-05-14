@@ -3,6 +3,7 @@ type entry =
   | Wall
   | Goal
   | Picture of Image.t
+  | Key of Crypt.affine_key
   | Person of User.t  (** [entry] is the type representing a maze entry. *)
 
 type location = int * int
@@ -19,10 +20,6 @@ val make : string -> t
 val char_of_entry : entry -> char
 (** [char_of_entry e] converts an entry of the maze e into a char
     representation. *)
-
-val hashtable_of_maze : t -> (location, entry) Hashtbl.t
-(** [hashtable_of_maze m] returns a hashtable form of the maze. *)
-(* TODO: deprecate ?*)
 
 val array_of_maze : t -> entry array array
 (** [array_of_maze m] returns maze m as a 2D array. *)

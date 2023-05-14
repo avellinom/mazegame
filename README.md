@@ -12,3 +12,4 @@ https://media.github.coecis.cornell.edu/user/12973/files/93237adb-5751-46ad-9eba
 Source of camel art : https://www.asciiart.eu/animals/camels
 Source of Egypt art : https://www.asciiart.eu/art-and-design/egyptian, https://ascii.co.uk/art/sphinx 
 Source of mazes : https://www.dcode.fr/maze-generator 
+Affine Cipher testing tool : https://www.dcode.fr/affine-cipher 

@@ -3,6 +3,7 @@ type entry =
   | Wall
   | Goal
   | Picture of Image.t
+  | Key of Crypt.affine_key
   | Person of User.t
 
 type location = int * int
@@ -14,6 +15,7 @@ let char_of_entry (e : entry) : char =
   | Wall -> '#'
   | Goal -> 'G'
   | Picture _ -> 'i'
+  | Key _ -> 'k'
   | Person _ -> 'p'
 
 (** [to_list f] converts a filename f into a list of strings where each element
@@ -60,16 +62,6 @@ let make (filename : string) : t =
 let get_num_rows (m : t) : int = Array.length m
 let get_num_cols (m : t) : int = Array.length m.(0)
 
-let hashtable_of_maze (m : t) : (location, entry) Hashtbl.t =
-  let hashtable = Hashtbl.create (get_num_rows m * get_num_cols m) in
-  Array.iteri
-    (fun row_i row ->
-      Array.iteri
-        (fun col_i entry -> Hashtbl.add hashtable (row_i, col_i) entry)
-        row)
-    m;
-  hashtable
-
 let array_of_maze (m : t) : entry array array =
   let num_rows = get_num_rows m in
   let num_cols = get_num_cols m in
@@ -79,7 +71,7 @@ let array_of_maze (m : t) : entry array array =
   done;
   new_array
 
-module LocationSet = Set.Make (struct
+module RandomSet = Set.Make (struct
   type t = int * int
 
   (* This enforces the random order of the set. Note: [Random.self_init ()]
@@ -91,22 +83,22 @@ module LocationSet = Set.Make (struct
 end)
 
 let generate_images (m : t) (desired_image_count : int) : t =
-  let free_locations = ref LocationSet.empty in
+  let free_locations = ref RandomSet.empty in
   Array.iteri
     (fun row_i row ->
       Array.iteri
         (fun col_i entry ->
           match entry with
           | Free when row_i != 0 && col_i != 0 ->
-              free_locations := LocationSet.add (row_i, col_i) !free_locations
+              free_locations := RandomSet.add (row_i, col_i) !free_locations
           | _ -> ())
         row)
     m;
   let desired_image_amount =
-    min desired_image_count (LocationSet.cardinal !free_locations)
+    min desired_image_count (RandomSet.cardinal !free_locations)
   in
   let images_added = ref 0 in
-  LocationSet.iter
+  RandomSet.iter
     (fun random_location ->
       if !images_added < desired_image_amount then begin
         let x, y = random_location in
