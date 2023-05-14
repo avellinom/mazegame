@@ -68,6 +68,35 @@ let lone_pyramid_art : string =
           /_I___I___I___I___I___I___I__\
   |}
 
+(* The sphinx that is displayed at the beginning of the sphinx level. *)
+let sphinx_art : string =
+  {|
+                _-_
+             /'. .'\   /\.
+        /\. /(|`/ !)\ /:_\/.
+       /:_\|  \ = /  |__:_\/ .
+            `  ---  .__:___\/./
+           /---------\___:__\/
+          /-----------\
+     ____/----   -/    \__
+    / / / / |     | \ \ \ \
+  |}
+
+(* The tomb that is displayed at the beginning of the tomb level. *)
+let pharaoh_art : string =
+  {|
+          _....._
+         .\:\:/:/.
+        /=\_.@._/=\
+       /==/ _ _ \==\
+      /==(   -   )==\
+      |===\  =  /===|
+      \====|-V-|====/
+       \===|   |===/
+        |==|   |==|
+        '=.|   |.='
+  |}
+
 (** [begin_console ()] begins the console. It displays the initial instructions
     of the game to the user. *)
 let begin_console () : unit =
@@ -204,15 +233,32 @@ and perform_instruction (input : instruction) : unit =
       let maze_typ, image_count =
         match typ with
         | Tourist ->
-            print_string [ console_color ] "\n\t\t\t -- TOURIST -- \n";
+            print_string [ console_color ] "\n\t\t   -- TOURIST -- \n";
             print_string [ console_color ] lone_pyramid_art;
             print_string [ console_color ]
-              "A tourist I see... Let's see if you can dance around the \
-               pyramid Giza.\n";
+              "\n\
+               A tourist I see... Let's see if you can dance around the \
+               pyramid Giza.\n\n";
             ("tourist.mz", 0)
         | Pyramid -> ("pyramid.mz", 0)
-        | Sphinx -> ("sphinx.mz", 0)
-        | Tomb -> ("tomb.mz", 0)
+        | Sphinx ->
+            print_string [ console_color ] "\n\t -- SPHINX -- \n";
+            print_string [ console_color ] sphinx_art;
+            print_string [ console_color ]
+              "\nYou're ambitious. Let's see you against the sphinx.\n";
+            print_string [ console_color ]
+              "She may drop you some images (i). Collect them and her ancient \
+               artifacts will be revealed to you.\n\n";
+            ("sphinx.mz", 5)
+        | Tomb ->
+            print_string [ console_color ] "\n\t -- TOMB -- \n";
+            print_string [ console_color ] pharaoh_art;
+            print_string [ console_color ] "\nAt last. The pharaoh's tomb.\n";
+            print_string [ console_color ]
+              "Deep inside, you find a strange string of text.\n";
+            print_string [ console_color ]
+              "Can you find the key (k) to decrypt this text?\n\n";
+            ("tomb.mz", 5)
       in
       let filepath = data_dir_prefix ^ maze_typ in
       let game_ctrl =
