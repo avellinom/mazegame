@@ -471,22 +471,28 @@ let make_one_branch seed a depth length f =
   left seed (c + c - a);
   backward seed length
 
+(** [random_tree_aux seed p depth length angle] is a helper function for
+    [make_random_tree]. *)
 let rec random_tree_aux seed p depth length angle =
   if depth = 0 then
     let pat = p () in
     draw_pat seed pat
   else (
     (match depth with
-    | n when n > 0 -> set_line_width n
+    | num when num > 0 -> set_line_width num
     | _ -> set_line_width 1);
-    Random.self_init ();
-    let n = Random.int 4 in
     forward seed length;
-    let a = Random.int 36 + 10 in
-    left seed a;
-    random_tree_aux seed p (depth - 1) (length *. i ()) a;
-    if n = 0 then make_two_branch seed a depth length random_tree_aux
-    else make_one_branch seed a depth length random_tree_aux)
+    if current_y () < 150 || current_x () > 750 || current_x () < 50 then (
+      random_tree_aux seed p 0 length 0;
+      backward seed length)
+    else (
+      Random.self_init ();
+      let n = Random.int 4 in
+      let a = Random.int 36 + 10 in
+      left seed a;
+      random_tree_aux seed p (depth - 1) (length *. i ()) a;
+      if n = 0 then make_two_branch seed a depth length random_tree_aux
+      else make_one_branch seed a depth length random_tree_aux))
 
 let make_random_tree () =
   floor ();
