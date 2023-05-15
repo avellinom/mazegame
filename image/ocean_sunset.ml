@@ -37,7 +37,3 @@ done
 
 ignore (wait_next_event [ Button_down ]);
 close_graph ()
-
-(* Ideas: 1. Anchor points - choose a few anchor points where colors are
-   dark/light, and blend them - +- around a random color i.e if randomly chosen
-   was red do around red, this makes more color scheme possible *)

@@ -1,9 +1,9 @@
+(** This executable provides an area to test out image generation. *)
+
 open Graphics
 open Lib
 open Art
 open Turtle
-
-(** This executable provides an area to test out image generation. *)
 
 let show_tree () =
   open_graph " 1000x1000";
