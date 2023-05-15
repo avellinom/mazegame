@@ -3,4 +3,4 @@
 
 val fancy_message : string -> unit
 (** [fancy_message s] prints s to the console with big letters (i.e., as a fancy
-    message) *)
+    message). Requires: s is lowercase letters. *)

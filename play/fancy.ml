@@ -61,7 +61,6 @@ let rec print_line char_lst l =
 
 let fancy_message str =
   let _ = print_string "\n" in
-
   for i = 0 to 2 do
     let _ = print_line (explode str) i in
     ()
