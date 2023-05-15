@@ -76,6 +76,9 @@ open OUnit2
 open Lib
 open Controller
 
+(* Turn on if you want to produce image side effects. Tests still work, just
+   have to click through the images. *)
+let test_image_solvability = false
 let data_dir_prefix : string = "data" ^ Filename.dir_sep
 
 (* The filepath to the tourist maze. *)
@@ -422,12 +425,16 @@ let controller_tests =
         get_close_to_sphinx_maze_exit 0 |> move_down);
     solved_game_test "User can solve tomb maze" (fun () ->
         get_close_to_tomb_maze_exit 0 |> move_down);
+  ]
+
+let image_tests =
+  [
     (* Solvability with images *)
     solved_game_test "User can solve tourist maze with images" (fun () ->
         make_game Tourist 5 |> move_down |> move_down |> move_right
         |> move_right |> move_right |> move_right);
-    solved_game_test "User can solve pyramid maze with images" (fun () ->
-        get_close_to_pyramid_maze_exit 10 |> move_down);
+    solved_game_test "User can solve pyramid\n       maze with images"
+      (fun () -> get_close_to_pyramid_maze_exit 10 |> move_down);
     solved_game_test "User can solve sphinx maze with images" (fun () ->
         get_close_to_sphinx_maze_exit 10 |> move_down);
     solved_game_test "User can solve tomb maze with images" (fun () ->
@@ -646,6 +653,11 @@ let cryptography_tests =
   ]
 
 let tests =
-  "Maze Game tests" >::: List.flatten [ controller_tests @ cryptography_tests ]
+  "Maze Game tests"
+  >::: List.flatten
+         [
+           (controller_tests @ cryptography_tests
+           @ if test_image_solvability then image_tests else []);
+         ]
 
 let _ = run_test_tt_main tests
