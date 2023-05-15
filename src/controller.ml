@@ -92,6 +92,11 @@ let move_user (c : t) (move : move) : t =
             | Key aff_key -> Found aff_key
             | _ -> c.key_maybe
           in
+          begin
+            match mz_array.(x').(y') with
+            | Picture display_picture -> display_picture ()
+            | _ -> ()
+          end;
           mz_array.(x').(y') <- Person user;
           { c with user_location = (x', y'); key_maybe = new_key_status }
       | false -> raise InvalidMove)
