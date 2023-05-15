@@ -482,6 +482,7 @@ let rec random_tree_aux seed p depth length angle =
     | num when num > 0 -> set_line_width num
     | _ -> set_line_width 1);
     forward seed length;
+    (* Keeps branch going too far down or up. *)
     if current_y () < 150 || current_x () > 750 || current_x () < 50 then (
       random_tree_aux seed p 0 length 0;
       backward seed length)
@@ -495,15 +496,17 @@ let rec random_tree_aux seed p depth length angle =
       else make_one_branch seed a depth length random_tree_aux))
 
 let make_random_tree () =
-  floor ();
-  let seed = init_tree 400 50 90 (palette (Orange 8)) in
   Random.self_init ();
+  let random_pick = Random.int 2 in
+  let color = if random_pick = 0 then Orange 8 else Orange 1 in
   let depth = Random.int 10 + 2 in
   let angle = Random.int 36 + 10 in
+  let seed = init_tree 400 50 90 (palette color) in
+  if random_pick = 0 then set_color (palette (Skyblue 1))
+  else set_color (palette (Blue 8));
+  fill_rect 0 0 1000 1000;
+  floor ();
   random_tree_aux seed p depth 150. angle;
   let random_seed = init_tree 0 0 0 black in
   let g () = draw_pat random_seed (p |> decrease_leaf) in
   fallen_leaf_aux g random_seed 80
-
-(* ((not check_first) && current_y () < 80) || current_x () > 780 || current_x
-   () < 20 *)
