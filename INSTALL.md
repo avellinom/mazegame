@@ -8,3 +8,8 @@
 ## Build and Run
 
 * Enter `make play`
+
+### Additional Run Options
+
+* `make opendoc` to open documentation in HTML format
+* `make test` to run tests
