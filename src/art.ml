@@ -69,52 +69,44 @@ let pentagon_endpts turtle r =
   right turtle 72;
   [| endpoint1; endpoint2; endpoint3; endpoint4; endpoint5 |]
 
-let draw_triangle turtle r =
+let draw_triangle turtle r c =
   let arr = triangle_endpts turtle r in
-  draw_poly arr
+  if c < 0 then draw_poly arr
+  else (
+    set_color c;
+    fill_poly arr;
+    set_color turtle.color)
 
-let draw_square turtle r =
+let draw_square turtle r c =
   let arr = sqruare_endpts turtle r in
-  draw_poly arr
+  if c < 0 then draw_poly arr
+  else (
+    set_color c;
+    fill_poly arr;
+    set_color turtle.color)
 
-let draw_diamond turtle h =
+let draw_diamond turtle h c =
   let arr = diamond_endpts turtle h in
-  draw_poly arr
+  if c < 0 then draw_poly arr
+  else (
+    set_color c;
+    fill_poly arr;
+    set_color turtle.color)
 
-let draw_pentagon turtle r =
+let draw_pentagon turtle r c =
   let arr = pentagon_endpts turtle r in
-  draw_poly arr
+  if c < 0 then draw_poly arr
+  else (
+    set_color c;
+    fill_poly arr;
+    set_color turtle.color)
 
-let draw_circle turtle r = Graphics.draw_circle turtle.x turtle.y r
-
-let color_circle turtle r c =
-  set_color c;
-  fill_circle turtle.x turtle.y r;
-  set_color turtle.color
-
-let color_triangle turtle r c =
-  set_color c;
-  let arr = triangle_endpts turtle r in
-  fill_poly arr;
-  set_color turtle.color
-
-let color_square turtle r c =
-  set_color c;
-  let arr = sqruare_endpts turtle r in
-  fill_poly arr;
-  set_color turtle.color
-
-let color_diamond turtle h c =
-  set_color c;
-  let arr = diamond_endpts turtle h in
-  fill_poly arr;
-  set_color turtle.color
-
-let color_pentagon turtle r c =
-  set_color c;
-  let arr = pentagon_endpts turtle r in
-  fill_poly arr;
-  set_color turtle.color
+let draw_circle turtle r c =
+  if c < 0 then Graphics.draw_circle turtle.x turtle.y r
+  else (
+    set_color c;
+    fill_circle turtle.x turtle.y r;
+    set_color turtle.color)
 
 type flake = turtle
 
@@ -133,27 +125,33 @@ let rec snowflake_side turtle length depth =
     left turtle 60;
     snowflake_side turtle new_l (depth - 1)
 
-let rec draw_snowflake turtle acc sides length depth =
+let rec draw_snowflake turtle acc sides length depth c =
   if acc = 0 then ()
-  else (
+  else
+    let orig_c = turtle.color in
+    turtle.color <- c;
     snowflake_side turtle length depth;
     right turtle (360 / sides);
-    draw_snowflake turtle (acc - 1) sides length depth)
+    draw_snowflake turtle (acc - 1) sides length depth c;
+    turtle.color <- orig_c
 
 type seed = Turtle.turtle
 
 let init_tree x y angle color = make_turtle x y angle color
 
-let rec draw_tree seed f depth length angle =
+let rec draw_tree seed f depth length angle c =
   if depth = 0 then f
-  else (
+  else
+    let orig_c = seed.color in
+    seed.color <- c;
     forward seed length;
     left seed angle;
-    draw_tree seed f (depth - 1) (length *. 0.8) angle;
+    draw_tree seed f (depth - 1) (length *. 0.8) angle c;
     right seed (angle * 2);
-    draw_tree seed f (depth - 1) (length *. 0.8) angle;
+    draw_tree seed f (depth - 1) (length *. 0.8) angle c;
     left seed angle;
-    backward seed length)
+    backward seed length;
+    seed.color <- orig_c
 
 type color_scheme =
   | Blank
@@ -172,7 +170,7 @@ type color_scheme =
   | BlackWhite of int
 
 let palette = function
-  | Blank -> failwith "Blank can't have color."
+  | Blank -> -1
   | Red 1 -> rgb 255 204 204
   | Red 2 -> rgb 255 153 153
   | Red 3 -> rgb 255 102 102
@@ -326,8 +324,14 @@ type pat =
   | Tree of pat * int * float * int * color_scheme
   | Snowflake of int * float * int * color_scheme
 
-(* let draw_pat turtle = function | NA -> () | Circle (r, c_scheme) -> |
-   Triangle (r, c_scheme) -> | Square (r, c_scheme) -> | Diamond (h, c_scheme)
-   -> | Pentagon (r, c_scheme) -> *)
-(* | Tree of patt * int * float * int * color_scheme | Snowflake of int * float
-   * int * color_scheme *)
+let rec draw_pat turtle = function
+  | NA -> ()
+  | Circle (r, c_scheme) -> draw_circle turtle r (palette c_scheme)
+  | Triangle (r, c_scheme) -> draw_triangle turtle r (palette c_scheme)
+  | Square (r, c_scheme) -> draw_square turtle r (palette c_scheme)
+  | Diamond (h, c_scheme) -> draw_diamond turtle h (palette c_scheme)
+  | Pentagon (r, c_scheme) -> draw_pentagon turtle r (palette c_scheme)
+  | Tree (p, depth, l, angle, c_scheme) ->
+      draw_tree turtle (draw_pat turtle p) depth l angle (palette c_scheme)
+  | Snowflake (sides, l, depth, c_scheme) ->
+      draw_snowflake turtle sides sides l depth (palette c_scheme)

@@ -39,47 +39,31 @@ type pat =
 val palette : color_scheme -> color
 (** [palette c_scheme] is color representative of [c_scheme]. *)
 
-val draw_triangle : turtle -> int -> unit
-(** [draw_triangle turtle r] is a triangle that has an endpoint at radius [r]
-    away from where [turtle] is facing. *)
+val draw_triangle : turtle -> int -> int -> unit
+(** [draw_triangle turtle r c] is a triangle that has an endpoint at radius [r]
+    away from where [turtle] is facing. If [c] is a valid color e.g.
+    non-negative, a triangle of color [c] is produced. *)
 
-val draw_square : turtle -> int -> unit
-(** [draw_square turtle r] is a square. The square is determined by where the
+val draw_square : turtle -> int -> int -> unit
+(** [draw_square turtle r c] is a square. The square is determined by where the
     [turtle] is facing. Going radius [r] from where [turtle] is facing will be
-    the middle of one side of the square. *)
+    the middle of one side of the square. If [c] is a valid color e.g.
+    non-negative, a square of color [c] is produced. *)
 
-val draw_diamond : turtle -> int -> unit
-(** [draw_diamond turtle h] is a diamond that has an endpoint at height [h] away
-    from where [turtle] is facing. *)
+val draw_diamond : turtle -> int -> int -> unit
+(** [draw_diamond turtle h c] is a diamond that has an endpoint at height [h]
+    away from where [turtle] is facing. If [c] is a valid color e.g.
+    non-negative, a diamond of color [c] is produced. *)
 
-val draw_circle : turtle -> int -> unit
-(** [draw_circle turtle r] is a circle with radius [r] at the location of
-    [turtle]. *)
+val draw_circle : turtle -> int -> int -> unit
+(** [draw_circle turtle r c] is a circle with radius [r] at the location of
+    [turtle]. If [c] is a valid color e.g. non-negative, a circle of color [c]
+    is produced. *)
 
-val draw_pentagon : turtle -> int -> unit
-(** [draw_pentagon turtle r] is a pentagon that has an endpoint at radius [r]
-    away from where [turtle] is facing. *)
-
-val color_triangle : turtle -> int -> int -> unit
-(** [color_triangle turtle r c] is a triangle of color [c] that has an endpoint
-    at radius [r] away from where [turtle] is facing. *)
-
-val color_square : turtle -> int -> int -> unit
-(** [color_square turtle r c] is a square of color [c]. The square is determined
-    by where the [turtle] is facing. Going radius [r] from where [turtle] is
-    facing will be the middle of one side of the square. *)
-
-val color_diamond : turtle -> int -> color -> unit
-(** [color_diamond turtle h c] is a diamond of color [c] that has an endpoint at
-    height [h] away from where [turtle] is facing. *)
-
-val color_pentagon : turtle -> int -> int -> unit
-(** [color_pentagon turtle r c] is a pentagon of color [c] that has an endpoint
-    at radius [r] away from where [turtle] is facing. *)
-
-val color_circle : turtle -> int -> int -> unit
-(** [color_circle turtle r c] is a circle of color [c] with radius [r] at the
-    location of [turtle]. *)
+val draw_pentagon : turtle -> int -> int -> unit
+(** [draw_pentagon turtle r c] is a pentagon that has an endpoint at radius [r]
+    away from where [turtle] is facing. If [c] is a valid color e.g.
+    non-negative, a pentagon of color [c] is produced. *)
 
 type flake = turtle
 
@@ -90,10 +74,10 @@ val init_snowflake : int -> int -> int -> int -> flake
 val snowflake_side : flake -> float -> int -> unit
 (** [snowflake_side turtle length depth] is one side of a snowflake. *)
 
-val draw_snowflake : flake -> int -> int -> float -> int -> unit
-(** [draw_snowflake flake acc sides length depth] is a snowflake with [sides] of
-    each [length] with [depth]. Precondition: [sides] must equal [acc] and
-    [depth should not be more than 4. ]*)
+val draw_snowflake : flake -> int -> int -> float -> int -> color -> unit
+(** [draw_snowflake flake acc sides length depth c] is a snowflake of color [c]
+    with [sides] of each [length] with [depth]. Precondition: [sides] must equal
+    [acc] and [depth should not be more than 4. ]*)
 
 type seed = turtle
 (** [seed] is the initial characteristics of a tree. The characteristics include
@@ -103,7 +87,10 @@ val init_tree : int -> int -> int -> int -> seed
 (** [init_tree x y angle color] is the [seed]. It marks the beginning of a tree
     at coordinate ([x], [y]) facing [angle] in [color]. *)
 
-val draw_tree : seed -> unit -> int -> float -> int -> unit
-(** [draw_tree seed f depth length angle] is a tree with initial branch/trunk
-    [length]. [angle] determines how wide the branches go and [f] determines the
-    leaf. *)
+val draw_tree : seed -> unit -> int -> float -> int -> color -> unit
+(** [draw_tree seed f depth length angle c] is a tree of color [c] with initial
+    branch/trunk [length]. [angle] determines how wide the branches go and [f]
+    determines the leaf. *)
+
+val draw_pat : turtle -> pat -> unit
+(** [draw_pat turtle pat] draws pattern [pat] where the [turtle] is. *)
