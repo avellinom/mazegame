@@ -15,6 +15,9 @@ type key_status =
   | NotFound of Crypt.affine_key
   | Found of Crypt.affine_key
 
+(** [key_status] represents the differ statuses a key can be in. Used with
+    [get_key_status]. *)
+
 val get_key_status : t -> key_status
 (** [get_key_status c] returns NotPlaced if a key was never placed on the maze.
     Otherwise, it returns Found if the key was found by the user and NotFound
