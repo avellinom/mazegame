@@ -424,6 +424,7 @@ let p =
         let c = f () in
         make_pentagon 6 c
 
+(** [decrease_leaf f] decreases leaf size. *)
 let decrease_leaf f =
   match f () with
   | Circle (_, c) -> make_circle 4 c
