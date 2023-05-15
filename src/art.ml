@@ -380,24 +380,34 @@ let pick_two () =
     | _ -> g ()
 
 let rec random_tree_aux seed p depth length angle =
-  print_endline (string_of_int depth);
   if depth = 0 then
     let pat = p () in
     draw_pat seed pat
-  else (
+  else
+    let n = Random.int 4 in
     forward seed length;
     let a = Random.int 36 + 10 in
     left seed a;
     random_tree_aux seed p (depth - 1) (length *. 0.8) a;
-    let b = Random.int 36 + 10 in
-    right seed (b * 2);
-    random_tree_aux seed p (depth - 1) (length *. 0.8) 45;
-    left seed ((b * 2) - a);
-    backward seed length)
+    if n = 0 then (
+      let b = Random.int 36 + 10 in
+      right seed b;
+      random_tree_aux seed p (depth - 1) (length *. 0.8) b;
+      let c = Random.int 36 + 10 in
+      right seed c;
+      random_tree_aux seed p (depth - 1) (length *. 0.8) c;
+      left seed (c + b - a);
+      backward seed length)
+    else
+      let c = Random.int 36 + 10 in
+      right seed (c * 2);
+      random_tree_aux seed p (depth - 1) (length *. 0.8) c;
+      left seed (c + c - a);
+      backward seed length
 
 let make_random_tree () =
   let seed = init_tree 500 100 90 black in
-  let depth = Random.int 13 + 1 in
+  let depth = Random.int 10 + 1 in
   let angle = Random.int 36 + 10 in
   let p =
     let f = pick_color () in

@@ -22,15 +22,15 @@ let test_stuff () =
     | 0 ->
         fun () ->
           let c = f () in
-          make_circle 10 c
+          make_circle 7 c
     | 1 ->
         fun () ->
           let c = f () in
-          make_triangle 10 c
+          make_triangle 7 c
     | 2 ->
         fun () ->
           let c = f () in
-          make_square 10 c
+          make_square 7 c
     | 3 ->
         fun () ->
           let c = f () in
@@ -38,7 +38,7 @@ let test_stuff () =
     | _ ->
         fun () ->
           let c = f () in
-          make_pentagon 10 c
+          make_pentagon 7 c
   in
   draw_pat turtle (p ())
 
@@ -50,12 +50,7 @@ let () =
   open_graph " 1000x1000";
   set_color (palette (Skyblue 1));
   fill_rect 0 0 1000 1000;
-  make_random_tree ();
-  make_random_tree ();
-  make_random_tree ();
-  make_random_tree ();
-  make_random_tree ();
-  make_random_tree ();
+  Random.self_init ();
   make_random_tree ();
   ignore (wait_next_event [ Button_down ]);
   close_graph ()
