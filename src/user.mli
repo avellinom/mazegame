@@ -1,3 +1,5 @@
+(** This module [User] implements a user, who can traverse the maze. *)
+
 type t
 (** [t] is the abstract type representing a user exists in the maze. *)
 

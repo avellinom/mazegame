@@ -1,3 +1,5 @@
+(** This module [Crypt] implements the Affine cryptosystem. *)
+
 type affine_key
 
 exception BadKey

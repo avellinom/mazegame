@@ -1,3 +1,6 @@
+(** This module [Controller] allows the user, images, keys, and all word objects
+    to interact with the maze. *)
+
 type t
 (** [t] is the abstract type representing a controller for a Maze Game. This is
     where the user provides instructions to the Maze Game. *)

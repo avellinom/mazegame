@@ -1,3 +1,5 @@
+(** This module [Art] represents tools for generating different works of art. *)
+
 open Turtle
 
 type color = int

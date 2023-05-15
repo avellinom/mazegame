@@ -1,3 +1,6 @@
+(** This module [Image] represents an image that the user can come across in the
+    maze and discover. *)
+
 type t
 (** [t] is the abstract type representing an image which exists in the maze. *)
 

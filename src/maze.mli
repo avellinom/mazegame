@@ -1,3 +1,5 @@
+(** This module [Maze] represents the Maze structure. *)
+
 type entry =
   | Free
   | Wall

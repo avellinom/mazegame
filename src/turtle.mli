@@ -1,4 +1,4 @@
-(** This module [Turtle.mli] is my OCaml version of python's Turtle module. *)
+(** This module [Turtle] is my OCaml version of python's Turtle module. *)
 
 type color = int
 
