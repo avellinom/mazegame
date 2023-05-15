@@ -379,6 +379,8 @@ let pick_two () =
     | 0 -> f ()
     | _ -> g ()
 
+let i () = Random.int 4 + 5 |> float_of_int |> ( *. ) 0.1
+
 let rec random_tree_aux seed p depth length angle =
   if depth = 0 then
     let pat = p () in
@@ -388,14 +390,14 @@ let rec random_tree_aux seed p depth length angle =
     forward seed length;
     let a = Random.int 36 + 10 in
     left seed a;
-    random_tree_aux seed p (depth - 1) (length *. 0.8) a;
+    random_tree_aux seed p (depth - 1) (length *. i ()) a;
     if n = 0 then (
       let b = Random.int 36 + 10 in
       right seed b;
-      random_tree_aux seed p (depth - 1) (length *. 0.8) b;
+      random_tree_aux seed p (depth - 1) (length *. i ()) b;
       let c = Random.int 36 + 10 in
       right seed c;
-      random_tree_aux seed p (depth - 1) (length *. 0.8) c;
+      random_tree_aux seed p (depth - 1) (length *. i ()) c;
       left seed (c + b - a);
       backward seed length)
     else
