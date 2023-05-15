@@ -15,11 +15,7 @@ https://media.github.coecis.cornell.edu/user/12973/files/2d41a9f2-5835-4224-8abd
 
 Game Demo:
 
-
-
 https://media.github.coecis.cornell.edu/user/12973/files/73288903-ccaa-44b2-ade8-3c8934030c0f
-
-
 
 Source of camel art: https://www.asciiart.eu/animals/camels
 
