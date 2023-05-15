@@ -68,6 +68,8 @@ val draw_pentagon : turtle -> int -> int -> unit
     non-negative, a pentagon of color [c] is produced. *)
 
 type flake = turtle
+(** [flake] is the initial characteristics of a snowflake. The characteristics
+    include initial position, color, and angle that it will start. *)
 
 val init_snowflake : int -> int -> int -> int -> flake
 (** [init_snowflake x y angle color] is the [flake]. It marks the an endpoint of
@@ -127,5 +129,13 @@ val make_snowflake : int -> float -> int -> color_scheme -> pat
     [c_scheme] and length [l]. [sides] represent the number of sides. [depth] is
     the level of branches. *)
 
+val pick_color : unit -> unit -> color_scheme
+(** [pick_color ()] is a random color scheme generator. This generator sticks
+    with the same color after the color being randomly chosen - only the
+    gradient varies. *)
+
 val random_gradient : unit -> int
 (** [random_gradient ()] is a random color gradient, that is 1 to 9. *)
+
+val make_random_tree : unit -> unit
+(** [make_random_tree ()] draws a random tree. *)

@@ -369,3 +369,58 @@ let pick_color () =
   | 12 -> fun () -> RedPink (random_gradient ())
   | 13 -> fun () -> BlackWhite (random_gradient ())
   | _ -> failwith "pick_one error"
+
+(** [pick_two ()] is two randomly chosen color schemes. *)
+let pick_two () =
+  let f = pick_color () in
+  let g = pick_color () in
+  fun () ->
+    match Random.int 2 with
+    | 0 -> f ()
+    | _ -> g ()
+
+let rec random_tree_aux seed p depth length angle =
+  print_endline (string_of_int depth);
+  if depth = 0 then
+    let pat = p () in
+    draw_pat seed pat
+  else (
+    forward seed length;
+    let a = Random.int 36 + 10 in
+    left seed a;
+    random_tree_aux seed p (depth - 1) (length *. 0.8) a;
+    let b = Random.int 36 + 10 in
+    right seed (b * 2);
+    random_tree_aux seed p (depth - 1) (length *. 0.8) 45;
+    left seed ((b * 2) - a);
+    backward seed length)
+
+let make_random_tree () =
+  let seed = init_tree 500 100 90 black in
+  let depth = Random.int 13 + 1 in
+  let angle = Random.int 36 + 10 in
+  let p =
+    let f = pick_color () in
+    match Random.int 5 with
+    | 0 ->
+        fun () ->
+          let c = f () in
+          make_circle 10 c
+    | 1 ->
+        fun () ->
+          let c = f () in
+          make_triangle 10 c
+    | 2 ->
+        fun () ->
+          let c = f () in
+          make_square 10 c
+    | 3 ->
+        fun () ->
+          let c = f () in
+          make_diamond 10 c
+    | _ ->
+        fun () ->
+          let c = f () in
+          make_pentagon 10 c
+  in
+  random_tree_aux seed p depth 100. angle
