@@ -6,7 +6,9 @@ type entry =
   | Goal
   | Picture of Image.t
   | Key of Crypt.affine_key
-  | Person of User.t  (** [entry] is the type representing a maze entry. *)
+  | Person of User.t
+
+(** [entry] is the type representing a maze entry. *)
 
 type location = int * int
 (** [location] is the type representing a location in the maze. *)

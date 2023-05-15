@@ -1,6 +1,8 @@
 (** This module [Crypt] implements the Affine cryptosystem. *)
 
 type affine_key
+(** [affine_key] is the abstract type representing a key used in the Affine
+    cryptosystem. *)
 
 exception BadKey
 (** Raised when there is an attempt to encrypt or decrypt text with a key=(a,b)
@@ -12,8 +14,8 @@ val generate_determined_affine_key : int -> int -> affine_key
 
 val generate_random_affine_key : unit -> affine_key
 (** [generate_random_affine_key ()] returns a key used with the affine cipher.
-    It is of the form k=(a,b) where gcd(a,26)=1 and a is in {1, ..., 26}. 
-    a and b are also non-negative. *)
+    It is of the form k=(a,b) where gcd(a,26)=1 and a is in \{1, ..., 26\}. a
+    and b are also non-negative. *)
 
 val affine_encrypt : string -> affine_key -> string
 (** [affine_encrypt p k] encrypts the plaintext p with key k. Requires: p

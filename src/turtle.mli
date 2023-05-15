@@ -1,6 +1,7 @@
 (** This module [Turtle] is my OCaml version of python's Turtle module. *)
 
 type color = int
+(** [color] is the color of the trail the turtle will leave as it moves. *)
 
 type turtle = {
   mutable x : int;
