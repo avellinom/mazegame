@@ -1,4 +1,76 @@
-(* Test plan: *)
+(**
+TEST PLAN: 
+
+Primarily, this program is a game in which the user can traverse the maze
+while collecting images and a key. To test this program, we employed a
+combination of both manual and automated testing. 
+
+WITH RESPECT TO Maze traversal: The validity of moves and sequences
+of moves that the user may take throughout the maze is tested automatically
+in the below suite. Here, we broke up the tests among simple initial
+movements, the ability of mazes to be generated with images, the ability
+of a user to be next to a barrier from any adjacent direction 
+(above, below, left, right), the inability of a user to traverse into
+a wall, and the general solvability of a maze. Thus, for each of our
+four mazes, a variety of move sequences were tested. We believe that
+this suite provides extensive coverage over all the moves a user may
+make in the maze. Nevertheless, it is not feasible to automatically
+test all combinations of moves, so we also employed extensive manual
+testing of the mazes. This includes: traversing through every square,
+attempting to leave the maze at every square, and attempting to
+pass through walls. Additionally, it is difficult to test the user’s
+ability to pick up keys and images in mazes automatically because they
+are dropped randomly. In this realm, manual testing was also used to ensure
+that users can pick up certain maze objects (keys, images)
+but not others (themselves, walls). From our automatic and
+manual testing of maze traversal, we are confident that the user will have
+an enjoyable experience traversing the mazes. 
+
+WITH RESPECT TO Images: Images are generated randomly, so there is great
+difficulty in testing what they look like automatically. Furthermore, even
+if the images were deterministic, we are not aware of any reasonable algorithm
+to test the contents of an OCaml graphics window. For this reason and because
+there is no requirement for any image to look a certain way, we focused our
+testing here entirely on manual testing. We extensively generated lots of
+different images, for example, those in [images/], to test out the user’s
+ability to open and close them seamlessly. For these reasons, we believe that
+the user will have an enjoyable experience collecting images and viewing them
+as they traverse the maze.
+
+WITH RESPECT TO Keys: From the user’s perspective, the use of cryptography
+in this project appears small, however, there is a full-fledged Affine
+cryptosystem library [Crypt] we authored to support it. It is crucial that
+the user is able to encrypt and decrypt the secret message correctly and the
+encryption and decryption of text is deterministic, so we were able to test this
+functionality mostly automatically. Below, you will find extensive test cases
+for Affine encryption and decryption, and the composition of the two. We tried
+to focus on coverage of different texts that could be encrypted, so we made
+sure to test strings of spaces and a variety of letters. However, when the user
+interacts with the cryptosystem they generate a random key to encrypt and 
+decrypt the secret message. Because of this, we also had to employ a small 
+amount of manual testing to ensure that this key is encrypted and decrypted 
+manually though the UI.
+
+WITH RESPECT TO Tested modules: We tested modules [Maze], [Controller], 
+[User], and [Crypt] through automated OUnit tests in this file. 
+
+WITH RESPECT TO Test case development: In our OUnit tests, we used black 
+box on maze traversal to make sure that the user would be able to navigate 
+the maze according to the [Controller.move_x] where [x] is a direction 
+{left, right, up, down} specification. Additionally, we employed glass box 
+tests here to check certain conditions in the [move_x] implementations, 
+such as when a user could try to navigate outside the board. Additionally, 
+black box tests were used on the Affine cryptosystem to make sure that it is 
+both mathematically correct and correct on our expected input 
+(lowercase with spaces). 
+
+WITH RESPECT TO System correctness: Because of our extensive automated 
+testing of user movement around the maze, as well as our extensive automating 
+testing of the Affine cryptosystem, and with our manual testing of playing the 
+game tons of times, increasing coverage each time and trying to break the 
+game in various ways, we believe that our testing approach as described 
+above demonstrates the correctness of this program overall.
+*)
 
 open OUnit2
 open Lib
