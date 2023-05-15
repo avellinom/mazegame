@@ -407,8 +407,45 @@ let rec random_tree_aux seed p depth length angle =
       left seed (c + c - a);
       backward seed length
 
+(** [floor ()] draws the floor for random tree. *)
+let floor () =
+  match Random.int 4 with
+  | 0 ->
+      set_color (palette (Red 9));
+      fill_rect 0 0 600 50
+  | 1 ->
+      set_color (palette (Orange 6));
+      fill_rect 0 0 600 50
+  | 2 ->
+      set_color (palette (LightGreen 7));
+      fill_rect 0 0 600 50
+  | _ ->
+      set_color (palette (Green 7));
+      fill_rect 0 0 600 50
+
+let rec fallen_leaf_aux f seed acc =
+  if acc = 0 then ()
+  else
+    let x, y, ang = (Random.int 599 + 1, Random.int 49 + 1, Random.int 181) in
+    seed.x <- x;
+    seed.y <- y;
+    seed.angle <- ang;
+    f ();
+    fallen_leaf_aux f seed (acc - 1)
+
+let decrease_leaf f =
+  match f () with
+  | Circle (_, c) -> make_circle 4 c
+  | Triangle (_, c) -> make_triangle 4 c
+  | Square (_, c) -> make_square 4 c
+  | Diamond (_, c) -> make_diamond 7 c
+  | Pentagon (_, c) -> make_pentagon 4 c
+  | _ -> failwith "leaf error"
+
 let make_random_tree () =
-  let seed = init_tree 500 100 90 black in
+  floor ();
+  set_line_width 2;
+  let seed = init_tree 300 50 90 (palette (Orange 8)) in
   let depth = Random.int 10 + 1 in
   let angle = Random.int 36 + 10 in
   let p =
@@ -417,15 +454,15 @@ let make_random_tree () =
     | 0 ->
         fun () ->
           let c = f () in
-          make_circle 10 c
+          make_circle 6 c
     | 1 ->
         fun () ->
           let c = f () in
-          make_triangle 10 c
+          make_triangle 6 c
     | 2 ->
         fun () ->
           let c = f () in
-          make_square 10 c
+          make_square 6 c
     | 3 ->
         fun () ->
           let c = f () in
@@ -433,6 +470,9 @@ let make_random_tree () =
     | _ ->
         fun () ->
           let c = f () in
-          make_pentagon 10 c
+          make_pentagon 6 c
   in
-  random_tree_aux seed p depth 100. angle
+  random_tree_aux seed p depth 100. angle;
+  let random_seed = init_tree 0 0 0 black in
+  let g () = draw_pat random_seed (p |> decrease_leaf) in
+  fallen_leaf_aux g random_seed 80

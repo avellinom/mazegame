@@ -47,7 +47,7 @@ let test_stuff () =
    (); ignore (wait_next_event [ Button_down ]); close_graph () *)
 
 let () =
-  open_graph " 1000x1000";
+  open_graph " 600x700";
   set_color (palette (Skyblue 1));
   fill_rect 0 0 1000 1000;
   Random.self_init ();
