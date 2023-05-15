@@ -40,19 +40,23 @@ exception MazeSolved
 val move_left : t -> t
 (** [move_left c] moves the user on the maze left once. Returns a controller,
     identical for c except for that movement. Raises: InvalidMove if the
-    movement is not possible.*)
+    movement is not possible. Raises: MazeSolved if this movement solves the
+    maze. *)
 
 val move_right : t -> t
 (** [move_right c] moves the user on the maze right once. Returns a controller,
     identical for c except for that movement. Raises: InvalidMove if the
-    movement is not possible.*)
+    movement is not possible. Raises: MazeSolved if this movement solves the
+    maze. *)
 
 val move_up : t -> t
 (** [move_up c] moves the user on the maze up once. Returns a controller,
     identical for c except for that movement. Raises: InvalidMove if the
-    movement is not possible.*)
+    movement is not possible. Raises: MazeSolved if this movement solves the
+    maze. *)
 
 val move_down : t -> t
 (** [move_down c] moves the user on the maze down once. Returns a controller,
     identical for c except for that movement. Raises: InvalidMove if the
-    movement is not possible.*)
+    movement is not possible. Raises: MazeSolved if this movement solves the
+    maze. *)
