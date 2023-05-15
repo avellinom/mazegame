@@ -26,8 +26,8 @@ clean:
 	rm -f maze_generator.zip
 
 zip:
-	rm -f search.zip
-	zip -r search.zip . -x@exclude.lst
+	rm -f game.zip
+	zip -r game.zip . -x@exclude.lst
 
 doc:
 	dune build @doc
