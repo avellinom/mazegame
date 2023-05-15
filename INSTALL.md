@@ -11,5 +11,5 @@
 
 ### Additional Run Options
 
-* `make opendoc` to open documentation in HTML format
+* `make doc` and `make opendoc` to open documentation in HTML format
 * `make test` to run tests
