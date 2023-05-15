@@ -3,156 +3,6 @@ open Turtle
 
 type color = int
 
-(** [find_endpoint turtle r_float] is the endpoint of an odd-sided polygon that
-    is radius [r_float] from where the [turtle] is facing. *)
-let find_endpoint turtle r =
-  let dx, dy = find_coordinate turtle.angle r in
-  let x = turtle.x + dx in
-  let y = turtle.y + dy in
-  (x, y)
-
-(** [triangle_endpts turtle r] is an array containing endpoints of a triangle.
-    Refer to [draw_triangle] spec for what triangle it describes. *)
-let triangle_endpts turtle r =
-  let r' = float_of_int r in
-  let endpoint1 = find_endpoint turtle r' in
-  right turtle 120;
-  let endpoint2 = find_endpoint turtle r' in
-  right turtle 120;
-  let endpoint3 = find_endpoint turtle r' in
-  right turtle 120;
-  [| endpoint1; endpoint2; endpoint3 |]
-
-(** [sqruare_endpts turtle r] is an array containing endpoints of a square.
-    Refer to [draw_square] spec for what square it describes. *)
-let sqruare_endpts turtle r =
-  left turtle 45;
-  let new_r = sqrt 2. *. float_of_int r in
-  let endpoint1 = find_endpoint turtle new_r in
-  left turtle 90;
-  let endpoint2 = find_endpoint turtle new_r in
-  left turtle 90;
-  let endpoint3 = find_endpoint turtle new_r in
-  left turtle 90;
-  let endpoint4 = find_endpoint turtle new_r in
-  left turtle 45;
-  [| endpoint1; endpoint2; endpoint3; endpoint4 |]
-
-(** [diamond_endpts turtle w h] is an array containing endpoints of a diamond.
-    Refer to [draw_diamond] spec for what diamond it describes. *)
-let diamond_endpts turtle h =
-  let w = float_of_int h /. 2. in
-  let h' = float_of_int h in
-  let endpoint1 = find_endpoint turtle h' in
-  left turtle 90;
-  let endpoint2 = find_endpoint turtle w in
-  left turtle 90;
-  let endpoint3 = find_endpoint turtle h' in
-  left turtle 90;
-  let endpoint4 = find_endpoint turtle w in
-  left turtle 90;
-  [| endpoint1; endpoint2; endpoint3; endpoint4 |]
-
-(** [pentagon_endpts turtle r] is an array containing endpoints of a pentagon.
-    Refer to [draw_pentagon] spec for what pentagon it describes. *)
-let pentagon_endpts turtle r =
-  let r' = float_of_int r in
-  let endpoint1 = find_endpoint turtle r' in
-  right turtle 72;
-  let endpoint2 = find_endpoint turtle r' in
-  right turtle 72;
-  let endpoint3 = find_endpoint turtle r' in
-  right turtle 72;
-  let endpoint4 = find_endpoint turtle r' in
-  right turtle 72;
-  let endpoint5 = find_endpoint turtle r' in
-  right turtle 72;
-  [| endpoint1; endpoint2; endpoint3; endpoint4; endpoint5 |]
-
-let draw_triangle turtle r c =
-  let arr = triangle_endpts turtle r in
-  if c < 0 then draw_poly arr
-  else (
-    set_color c;
-    fill_poly arr;
-    set_color turtle.color)
-
-let draw_square turtle r c =
-  let arr = sqruare_endpts turtle r in
-  if c < 0 then draw_poly arr
-  else (
-    set_color c;
-    fill_poly arr;
-    set_color turtle.color)
-
-let draw_diamond turtle h c =
-  let arr = diamond_endpts turtle h in
-  if c < 0 then draw_poly arr
-  else (
-    set_color c;
-    fill_poly arr;
-    set_color turtle.color)
-
-let draw_pentagon turtle r c =
-  let arr = pentagon_endpts turtle r in
-  if c < 0 then draw_poly arr
-  else (
-    set_color c;
-    fill_poly arr;
-    set_color turtle.color)
-
-let draw_circle turtle r c =
-  if c < 0 then Graphics.draw_circle turtle.x turtle.y r
-  else (
-    set_color c;
-    fill_circle turtle.x turtle.y r;
-    set_color turtle.color)
-
-type flake = turtle
-
-let init_snowflake x y angle color = make_turtle x y angle color
-
-(* Do not have higher than 4 depth *)
-let rec snowflake_side turtle length depth =
-  if depth = 0 then forward turtle length
-  else
-    let new_l = length /. 3. in
-    snowflake_side turtle new_l (depth - 1);
-    left turtle 60;
-    snowflake_side turtle new_l (depth - 1);
-    right turtle 120;
-    snowflake_side turtle new_l (depth - 1);
-    left turtle 60;
-    snowflake_side turtle new_l (depth - 1)
-
-let rec draw_snowflake turtle acc sides length depth c =
-  if acc = 0 then ()
-  else
-    let orig_c = turtle.color in
-    turtle.color <- c;
-    snowflake_side turtle length depth;
-    right turtle (360 / sides);
-    draw_snowflake turtle (acc - 1) sides length depth c;
-    turtle.color <- orig_c
-
-type seed = Turtle.turtle
-
-let init_tree x y angle color = make_turtle x y angle color
-
-let rec draw_tree seed f depth length angle c =
-  if depth = 0 then f
-  else
-    let orig_c = seed.color in
-    seed.color <- c;
-    forward seed length;
-    left seed angle;
-    draw_tree seed f (depth - 1) (length *. 0.8) angle c;
-    right seed (angle * 2);
-    draw_tree seed f (depth - 1) (length *. 0.8) angle c;
-    left seed angle;
-    backward seed length;
-    seed.color <- orig_c
-
 type color_scheme =
   | Blank
   | Red of int
@@ -168,6 +18,24 @@ type color_scheme =
   | Pink of int
   | RedPink of int
   | BlackWhite of int
+
+type pat =
+  | NA
+  | Circle of int * color_scheme
+  | Triangle of int * color_scheme
+  | Square of int * color_scheme
+  | Diamond of int * color_scheme
+  | Pentagon of int * color_scheme
+  | Tree of (unit -> pat) * int * float * int * color_scheme
+  | Snowflake of int * float * int * color_scheme
+
+let make_circle r c_scheme = Circle (r, c_scheme)
+let make_triangle r c_scheme = Triangle (r, c_scheme)
+let make_square r c_scheme = Square (r, c_scheme)
+let make_diamond h c_scheme = Diamond (h, c_scheme)
+let make_pentagon r c_scheme = Pentagon (r, c_scheme)
+let make_tree p depth l angle c_scheme = Tree (p, depth, l, angle, c_scheme)
+let make_snowflake sides l depth c_scheme = Snowflake (sides, l, depth, c_scheme)
 
 let palette = function
   | Blank -> -1
@@ -314,24 +182,190 @@ let palette = function
   | BlackWhite _ ->
       failwith "BlackWhite color scheme int must be between 1 and 9 inclusive."
 
-type pat =
-  | NA
-  | Circle of int * color_scheme
-  | Triangle of int * color_scheme
-  | Square of int * color_scheme
-  | Diamond of int * color_scheme
-  | Pentagon of int * color_scheme
-  | Tree of pat * int * float * int * color_scheme
-  | Snowflake of int * float * int * color_scheme
+(** [find_endpoint turtle r_float] is the endpoint of an odd-sided polygon that
+    is radius [r_float] from where the [turtle] is facing. *)
+let find_endpoint turtle r =
+  let dx, dy = find_coordinate turtle.angle r in
+  let x = turtle.x + dx in
+  let y = turtle.y + dy in
+  (x, y)
 
-let rec draw_pat turtle = function
+(** [triangle_endpts turtle r] is an array containing endpoints of a triangle.
+    Refer to [draw_triangle] spec for what triangle it describes. *)
+let triangle_endpts turtle r =
+  let r' = float_of_int r in
+  let endpoint1 = find_endpoint turtle r' in
+  right turtle 120;
+  let endpoint2 = find_endpoint turtle r' in
+  right turtle 120;
+  let endpoint3 = find_endpoint turtle r' in
+  right turtle 120;
+  [| endpoint1; endpoint2; endpoint3 |]
+
+(** [sqruare_endpts turtle r] is an array containing endpoints of a square.
+    Refer to [draw_square] spec for what square it describes. *)
+let sqruare_endpts turtle r =
+  left turtle 45;
+  let new_r = sqrt 2. *. float_of_int r in
+  let endpoint1 = find_endpoint turtle new_r in
+  left turtle 90;
+  let endpoint2 = find_endpoint turtle new_r in
+  left turtle 90;
+  let endpoint3 = find_endpoint turtle new_r in
+  left turtle 90;
+  let endpoint4 = find_endpoint turtle new_r in
+  left turtle 45;
+  [| endpoint1; endpoint2; endpoint3; endpoint4 |]
+
+(** [diamond_endpts turtle w h] is an array containing endpoints of a diamond.
+    Refer to [draw_diamond] spec for what diamond it describes. *)
+let diamond_endpts turtle h =
+  let w = float_of_int h /. 2. in
+  let h' = float_of_int h in
+  let endpoint1 = find_endpoint turtle h' in
+  left turtle 90;
+  let endpoint2 = find_endpoint turtle w in
+  left turtle 90;
+  let endpoint3 = find_endpoint turtle h' in
+  left turtle 90;
+  let endpoint4 = find_endpoint turtle w in
+  left turtle 90;
+  [| endpoint1; endpoint2; endpoint3; endpoint4 |]
+
+(** [pentagon_endpts turtle r] is an array containing endpoints of a pentagon.
+    Refer to [draw_pentagon] spec for what pentagon it describes. *)
+let pentagon_endpts turtle r =
+  let r' = float_of_int r in
+  let endpoint1 = find_endpoint turtle r' in
+  right turtle 72;
+  let endpoint2 = find_endpoint turtle r' in
+  right turtle 72;
+  let endpoint3 = find_endpoint turtle r' in
+  right turtle 72;
+  let endpoint4 = find_endpoint turtle r' in
+  right turtle 72;
+  let endpoint5 = find_endpoint turtle r' in
+  right turtle 72;
+  [| endpoint1; endpoint2; endpoint3; endpoint4; endpoint5 |]
+
+let draw_triangle turtle r c =
+  let arr = triangle_endpts turtle r in
+  if c < 0 then draw_poly arr
+  else (
+    set_color c;
+    fill_poly arr;
+    set_color turtle.color)
+
+let draw_square turtle r c =
+  let arr = sqruare_endpts turtle r in
+  if c < 0 then draw_poly arr
+  else (
+    set_color c;
+    fill_poly arr;
+    set_color turtle.color)
+
+let draw_diamond turtle h c =
+  let arr = diamond_endpts turtle h in
+  if c < 0 then draw_poly arr
+  else (
+    set_color c;
+    fill_poly arr;
+    set_color turtle.color)
+
+let draw_pentagon turtle r c =
+  let arr = pentagon_endpts turtle r in
+  if c < 0 then draw_poly arr
+  else (
+    set_color c;
+    fill_poly arr;
+    set_color turtle.color)
+
+let draw_circle turtle r c =
+  if c < 0 then Graphics.draw_circle turtle.x turtle.y r
+  else (
+    set_color c;
+    fill_circle turtle.x turtle.y r;
+    set_color turtle.color)
+
+type flake = turtle
+
+let init_snowflake x y angle color = make_turtle x y angle color
+
+(* Do not have higher than 4 depth *)
+let rec snowflake_side turtle length depth =
+  if depth = 0 then forward turtle length
+  else
+    let new_l = length /. 3. in
+    snowflake_side turtle new_l (depth - 1);
+    left turtle 60;
+    snowflake_side turtle new_l (depth - 1);
+    right turtle 120;
+    snowflake_side turtle new_l (depth - 1);
+    left turtle 60;
+    snowflake_side turtle new_l (depth - 1)
+
+let rec draw_snowflake turtle acc sides length depth c =
+  if acc = 0 then ()
+  else
+    let orig_c = turtle.color in
+    turtle.color <- c;
+    snowflake_side turtle length depth;
+    right turtle (360 / sides);
+    draw_snowflake turtle (acc - 1) sides length depth c;
+    turtle.color <- orig_c
+
+let random_gradient () = Random.int 9 + 1
+
+type seed = Turtle.turtle
+
+let init_tree x y angle color = make_turtle x y angle color
+
+let rec draw_tree seed p depth length angle c =
+  if depth = 0 then
+    let pat = p () in
+    draw_pat seed pat
+  else
+    let orig_c = seed.color in
+    seed.color <- c;
+    forward seed length;
+    left seed angle;
+    draw_tree seed p (depth - 1) (length *. 0.8) angle c;
+    right seed (angle * 2);
+    draw_tree seed p (depth - 1) (length *. 0.8) angle c;
+    left seed angle;
+    backward seed length;
+    seed.color <- orig_c
+
+and draw_pat turtle p =
+  match p with
   | NA -> ()
   | Circle (r, c_scheme) -> draw_circle turtle r (palette c_scheme)
   | Triangle (r, c_scheme) -> draw_triangle turtle r (palette c_scheme)
   | Square (r, c_scheme) -> draw_square turtle r (palette c_scheme)
   | Diamond (h, c_scheme) -> draw_diamond turtle h (palette c_scheme)
   | Pentagon (r, c_scheme) -> draw_pentagon turtle r (palette c_scheme)
-  | Tree (p, depth, l, angle, c_scheme) ->
-      draw_tree turtle (draw_pat turtle p) depth l angle (palette c_scheme)
+  | Tree (p', depth, l, angle, c_scheme) ->
+      draw_tree turtle p' depth l angle (palette c_scheme)
   | Snowflake (sides, l, depth, c_scheme) ->
       draw_snowflake turtle sides sides l depth (palette c_scheme)
+
+(** [pick_color ()] is a random color scheme generator. This generator sticks
+    with the same color after the color being randomly chosen - only the
+    gradient varies. *)
+let pick_color () =
+  match Random.int 14 with
+  | 0 -> fun () -> Blank
+  | 1 -> fun () -> Red (random_gradient ())
+  | 2 -> fun () -> Orange (random_gradient ())
+  | 3 -> fun () -> Yellow (random_gradient ())
+  | 4 -> fun () -> LightGreen (random_gradient ())
+  | 5 -> fun () -> Green (random_gradient ())
+  | 6 -> fun () -> BlueGreen (random_gradient ())
+  | 7 -> fun () -> Skyblue (random_gradient ())
+  | 8 -> fun () -> LightBlue (random_gradient ())
+  | 9 -> fun () -> Blue (random_gradient ())
+  | 10 -> fun () -> Purple (random_gradient ())
+  | 11 -> fun () -> Pink (random_gradient ())
+  | 12 -> fun () -> RedPink (random_gradient ())
+  | 13 -> fun () -> BlackWhite (random_gradient ())
+  | _ -> failwith "pick_one error"
