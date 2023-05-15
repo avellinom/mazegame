@@ -353,6 +353,7 @@ and draw_pat turtle p =
     with the same color after the color being randomly chosen - only the
     gradient varies. *)
 let pick_color () =
+  Random.self_init ();
   match Random.int 14 with
   | 0 -> fun () -> Blank
   | 1 -> fun () -> Red (random_gradient ())
@@ -375,63 +376,53 @@ let pick_two () =
   let f = pick_color () in
   let g = pick_color () in
   fun () ->
+    Random.self_init ();
     match Random.int 2 with
     | 0 -> f ()
     | _ -> g ()
 
-let i () = Random.int 4 + 5 |> float_of_int |> ( *. ) 0.1
-
-let rec random_tree_aux seed p depth length angle =
-  if depth = 0 then
-    let pat = p () in
-    draw_pat seed pat
-  else
-    let n = Random.int 4 in
-    forward seed length;
-    let a = Random.int 36 + 10 in
-    left seed a;
-    random_tree_aux seed p (depth - 1) (length *. i ()) a;
-    if n = 0 then (
-      let b = Random.int 36 + 10 in
-      right seed b;
-      random_tree_aux seed p (depth - 1) (length *. i ()) b;
-      let c = Random.int 36 + 10 in
-      right seed c;
-      random_tree_aux seed p (depth - 1) (length *. i ()) c;
-      left seed (c + b - a);
-      backward seed length)
-    else
-      let c = Random.int 36 + 10 in
-      right seed (c * 2);
-      random_tree_aux seed p (depth - 1) (length *. 0.8) c;
-      left seed (c + c - a);
-      backward seed length
-
 (** [floor ()] draws the floor for random tree. *)
 let floor () =
+  Random.self_init ();
   match Random.int 4 with
   | 0 ->
       set_color (palette (Red 9));
-      fill_rect 0 0 600 50
+      fill_rect 0 0 800 50
   | 1 ->
       set_color (palette (Orange 6));
-      fill_rect 0 0 600 50
+      fill_rect 0 0 800 50
   | 2 ->
       set_color (palette (LightGreen 7));
-      fill_rect 0 0 600 50
+      fill_rect 0 0 800 50
   | _ ->
       set_color (palette (Green 7));
-      fill_rect 0 0 600 50
+      fill_rect 0 0 800 50
 
-let rec fallen_leaf_aux f seed acc =
-  if acc = 0 then ()
-  else
-    let x, y, ang = (Random.int 599 + 1, Random.int 49 + 1, Random.int 181) in
-    seed.x <- x;
-    seed.y <- y;
-    seed.angle <- ang;
-    f ();
-    fallen_leaf_aux f seed (acc - 1)
+(** [p ()] is a random pattern. *)
+let p =
+  let f = pick_color () in
+  Random.self_init ();
+  match Random.int 5 with
+  | 0 ->
+      fun () ->
+        let c = f () in
+        make_circle 6 c
+  | 1 ->
+      fun () ->
+        let c = f () in
+        make_triangle 6 c
+  | 2 ->
+      fun () ->
+        let c = f () in
+        make_square 6 c
+  | 3 ->
+      fun () ->
+        let c = f () in
+        make_diamond 10 c
+  | _ ->
+      fun () ->
+        let c = f () in
+        make_pentagon 6 c
 
 let decrease_leaf f =
   match f () with
@@ -442,37 +433,71 @@ let decrease_leaf f =
   | Pentagon (_, c) -> make_pentagon 4 c
   | _ -> failwith "leaf error"
 
+(** [fallen_leaf_aux f seed acc] draws fallen leaves of a random tree. *)
+let rec fallen_leaf_aux f seed acc =
+  if acc = 0 then ()
+  else
+    let x, y, ang =
+      Random.self_init ();
+      (Random.int (800 - (90 * 2)) + 90, Random.int 49 + 1, Random.int 181)
+    in
+    seed.x <- x;
+    seed.y <- y;
+    seed.angle <- ang;
+    f ();
+    fallen_leaf_aux f seed (acc - 1)
+
+(** [i()] is random float between 0.5 to 0.9 exlcusive. *)
+let i () =
+  Random.self_init ();
+  Random.float 0.4 +. 0.5
+
+(** [make_two_branch seed a depth length f] makes two branches. *)
+let make_two_branch seed a depth length f =
+  let b = Random.int 36 + 10 in
+  right seed b;
+  f seed p (depth - 1) (length *. i ()) b;
+  let c = Random.int 36 + 10 in
+  right seed c;
+  f seed p (depth - 1) (length *. i ()) c;
+  left seed (c + b - a);
+  backward seed length
+
+(** [make_one_branch seed a depth length f] makes one branche. *)
+let make_one_branch seed a depth length f =
+  let c = Random.int 36 + 10 in
+  right seed (c * 2);
+  f seed p (depth - 1) (length *. 0.8) c;
+  left seed (c + c - a);
+  backward seed length
+
+let rec random_tree_aux seed p depth length angle =
+  if depth = 0 then
+    let pat = p () in
+    draw_pat seed pat
+  else (
+    (match depth with
+    | n when n > 0 -> set_line_width n
+    | _ -> set_line_width 1);
+    Random.self_init ();
+    let n = Random.int 4 in
+    forward seed length;
+    let a = Random.int 36 + 10 in
+    left seed a;
+    random_tree_aux seed p (depth - 1) (length *. i ()) a;
+    if n = 0 then make_two_branch seed a depth length random_tree_aux
+    else make_one_branch seed a depth length random_tree_aux)
+
 let make_random_tree () =
   floor ();
-  set_line_width 2;
-  let seed = init_tree 300 50 90 (palette (Orange 8)) in
-  let depth = Random.int 10 + 1 in
+  let seed = init_tree 400 50 90 (palette (Orange 8)) in
+  Random.self_init ();
+  let depth = Random.int 10 + 2 in
   let angle = Random.int 36 + 10 in
-  let p =
-    let f = pick_color () in
-    match Random.int 5 with
-    | 0 ->
-        fun () ->
-          let c = f () in
-          make_circle 6 c
-    | 1 ->
-        fun () ->
-          let c = f () in
-          make_triangle 6 c
-    | 2 ->
-        fun () ->
-          let c = f () in
-          make_square 6 c
-    | 3 ->
-        fun () ->
-          let c = f () in
-          make_diamond 10 c
-    | _ ->
-        fun () ->
-          let c = f () in
-          make_pentagon 6 c
-  in
-  random_tree_aux seed p depth 100. angle;
+  random_tree_aux seed p depth 150. angle;
   let random_seed = init_tree 0 0 0 black in
   let g () = draw_pat random_seed (p |> decrease_leaf) in
   fallen_leaf_aux g random_seed 80
+
+(* ((not check_first) && current_y () < 80) || current_x () > 780 || current_x
+   () < 20 *)
