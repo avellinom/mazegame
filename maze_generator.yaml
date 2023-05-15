@@ -12,7 +12,8 @@ pm:
 publish: true
 title: "Explore the mazes of Egypt: Collect ancient artifacts and decrypt tomb secrets"
 git-repo: "https://github.coecis.cornell.edu/jj578/maze_generator"
-demo-video-url: "https://media.github.coecis.cornell.edu/user/12973/files/2d41a9f2-5835-4224-8abd-92ee1f328eee"
+demo-video-url1: "https://media.github.coecis.cornell.edu/user/12973/files/2d41a9f2-5835-4224-8abd-92ee1f328eee"
+demo-video-url2: "https://media.github.coecis.cornell.edu/user/12973/files/5ed9e678-a144-46c0-9ee8-41abe171d805"
 desc: >
   Our project is a maze game centered in Egypt. Explore four mazes of 
   increasing difficulty: tourist, pyramid, sphinx, and tomb. At the sphinx and 
