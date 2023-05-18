@@ -18,6 +18,9 @@ image:
 play:
 	OCAMLRUNPARAM=b dune exec play/main.exe
 
+tree:
+	dune exec image/main.exe
+
 test:
 	OCAMLRUNPARAM=b dune exec test/main.exe
 
