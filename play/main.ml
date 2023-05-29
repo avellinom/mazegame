@@ -67,7 +67,6 @@ let encrypted_message : string ref = ref ""
 (** [begin_console ()] begins the console. It displays the initial instructions
     of the game to the user. *)
 let begin_console () : unit =
-  Fancy.fancy_message "xxxxxxxxxxxxxxxxxxxxxxxx";
   print_string [ console_color ] "\n\t\t\t -- Welcome to Egypt! -- \n";
   print_string [ console_color ] camel_art;
   print_string [ console_subcolor ] "\nHere's how everything works: \n";
