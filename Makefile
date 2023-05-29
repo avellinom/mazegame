@@ -8,10 +8,6 @@ code:
 	code .
 	! dune build --watch
 
-# TODO: currently not working, will resolve later
-# utop:
-# 	OCAMLRUNPARAM=b dune utop lib
-
 image:
 	OCAMLRUNPARAM=b dune exec image/main.exe
 

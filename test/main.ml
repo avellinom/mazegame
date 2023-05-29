@@ -433,8 +433,8 @@ let image_tests =
     solved_game_test "User can solve tourist maze with images" (fun () ->
         make_game Tourist 5 |> move_down |> move_down |> move_right
         |> move_right |> move_right |> move_right);
-    solved_game_test "User can solve pyramid\n       maze with images"
-      (fun () -> get_close_to_pyramid_maze_exit 10 |> move_down);
+    solved_game_test "User can solve pyramid maze with images" (fun () ->
+        get_close_to_pyramid_maze_exit 10 |> move_down);
     solved_game_test "User can solve sphinx maze with images" (fun () ->
         get_close_to_sphinx_maze_exit 10 |> move_down);
     solved_game_test "User can solve tomb maze with images" (fun () ->
