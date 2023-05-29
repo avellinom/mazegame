@@ -14,5 +14,5 @@ https://github.com/avellinom/mazegame/assets/51297827/8b77d937-141a-4dac-9578-61
 
 ## Sources of mazes and ASCII art
 
-* [mazes](https://www.dcode.fr/maze-generator)
+* [Mazes](https://www.dcode.fr/maze-generator)
 * [Camels](https://www.asciiart.eu/animals/camels), [Egypt]( https://www.asciiart.eu/art-and-design/egyptian), [Sphinx](https://ascii.co.uk/art/sphinx)
