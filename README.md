@@ -2,15 +2,13 @@
 
 Final project for CS3110, Functional Programming and Data Structures, Spring 2023, Cornell University. Authored by Michael Avellino and Jun Jang.
 
-Random Tree Generator Demo:
+## Game Demo
 
-https://media.github.coecis.cornell.edu/user/12973/files/2d41a9f2-5835-4224-8abd-92ee1f328eee
+https://github.com/avellinom/mazegame/assets/51297827/2a59db49-6acb-4e73-bcb0-bddaa827ff88
 
-Game Demo:
+## Image Generator Demo
 
-https://media.github.coecis.cornell.edu/user/12973/files/73288903-ccaa-44b2-ade8-3c8934030c0f
-
-
+https://github.com/avellinom/mazegame/assets/51297827/8b77d937-141a-4dac-9578-61e8518f5984
 
 ## Sources of mazes and ASCII art
 
