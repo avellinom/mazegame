@@ -2,7 +2,7 @@
 
 **Explore the mazes of Egypt: Collect ancient artifacts and decrypt tomb secrets**. Traverse four mazes of increasing difficulty: tourist, pyramid, sphinx, and tomb. At the sphinx and tomb, you may discover ancient artifacts, which you can collect and view. These are random trees. At the tomb, you may find a key which can be used to decrypt a secret message at the tomb's door.
 
-Final project for CS3110, Functional Programming and Data Structures, Spring 2023, Cornell University. Authored by *Michael Avellino and Jun Jang*.
+Final project for CS3110, Functional Programming and Data Structures, Spring 2023, Cornell University. *Authored by Michael Avellino and Jun Jang*.
 
 ## Game Demo
 
